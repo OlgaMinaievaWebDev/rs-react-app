@@ -1,10 +1,26 @@
 import React from 'react';
 
-export class Search extends React.Component {
+interface SearchProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSearch: () => void;
+}
+export class Search extends React.Component<SearchProps> {
   render() {
+    const { value, onChange, onSearch } = this.props;
+
     return (
       <header className="search-section">
-        <p>Top Section</p>
+        <input
+          value={value}
+          onChange={onChange}
+          className="search-input"
+          type="text"
+          placeholder="Search for item"
+        />
+        <button className="search-button" type="button" onClick={onSearch}>
+          Search
+        </button>
       </header>
     );
   }
