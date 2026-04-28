@@ -35,7 +35,7 @@ class App extends React.Component<object, AppState> {
       search: savedInput,
     });
 
-    this.fetchItems(this.state.search);
+    this.fetchItems(savedInput);
   }
 
   handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,12 +47,15 @@ class App extends React.Component<object, AppState> {
   handleSearchClick = () => {
     const trimmed = this.state.search.trim();
     const saved = localStorage.getItem('input');
-    if (trimmed === saved) {
-      return;
-    }
+
     this.setState({
       search: trimmed,
     });
+
+    if (trimmed === saved) {
+      return;
+    }
+
     localStorage.setItem('input', trimmed);
     this.fetchItems(trimmed);
   };
@@ -65,26 +68,28 @@ class App extends React.Component<object, AppState> {
     const baseUrl = 'https://rickandmortyapi.com/api/character';
     const url = searchItems ? `${baseUrl}/?name=${searchItems}` : baseUrl;
 
-    fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        return response.json();
-      })
-      .then((data: CharactersResponse) => {
-        this.setState({
-          items: data.results,
-          isLoading: false,
+    setTimeout(() => {
+      fetch(url)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Failed to fetch data');
+          }
+          return response.json();
+        })
+        .then((data: CharactersResponse) => {
+          this.setState({
+            items: data.results,
+            isLoading: false,
+          });
+        })
+        .catch(() => {
+          this.setState({
+            isLoading: false,
+            error: 'No characters found. Try another search term.',
+            items: [],
+          });
         });
-      })
-      .catch(() => {
-        this.setState({
-          isLoading: false,
-          error: 'Something went wrong',
-          items: [],
-        });
-      });
+    }, 300);
   };
 
   render() {

@@ -1,10 +1,36 @@
 import React from 'react';
+import type { Character } from '../App';
 
-export class Results extends React.Component {
+interface ResultsProps {
+  items: Character[];
+  isLoading: boolean;
+  error: string | null;
+}
+export class Results extends React.Component<ResultsProps> {
   render() {
+    const { items, isLoading, error } = this.props;
+
+    if (isLoading) {
+      return <section className="results-section">Loading...</section>;
+    }
+    if (error) {
+      return <section className="results-section">{error}</section>;
+    }
+
+    if (!items.length) {
+      return <section className="results-section">No results</section>;
+    }
+
     return (
       <section className="results-section">
-        <p>Results</p>
+        {items.map((item) => (
+          <article key={item.id}>
+            <h3>{item.name}</h3>
+            <p>
+              {item.species} — {item.status}
+            </p>
+          </article>
+        ))}
       </section>
     );
   }
