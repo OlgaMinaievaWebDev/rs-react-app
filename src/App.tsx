@@ -78,7 +78,13 @@ class App extends React.Component<object, AppState> {
       error: null,
     });
     const baseUrl = 'https://rickandmortyapi.com/api/character';
-    const url = searchItems ? `${baseUrl}/?name=${searchItems}` : baseUrl;
+    const params = new URLSearchParams({ page: '1' });
+
+    if (searchItems) {
+      params.set('name', searchItems);
+    }
+
+    const url = `${baseUrl}/?${params.toString()}`;
 
     setTimeout(() => {
       fetch(url)
