@@ -30,10 +30,8 @@ export class Results extends React.Component<ResultsProps> {
       <section className="results-section">
         {items.map((item) => (
           <article className="result-card" key={item.id}>
-            <h3>{item.name}</h3>
-            <p>
-              {item.species} — {item.status}
-            </p>
+            <h3>Name: {item.name}</h3>
+            <p>Description: {item.species} character with {item.status} status.</p>
           </article>
         ))}
       </section>

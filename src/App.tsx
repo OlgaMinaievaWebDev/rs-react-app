@@ -22,6 +22,16 @@ export interface Character {
 interface CharactersResponse {
   results: Character[];
 }
+
+class ApiError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+  }
+}
+
 class App extends React.Component<object, AppState> {
   state: AppState = {
     search: '',
@@ -48,7 +58,7 @@ class App extends React.Component<object, AppState> {
 
   handleSearchClick = () => {
     const trimmed = this.state.search.trim();
-    const saved = localStorage.getItem('input');
+    const saved = localStorage.getItem('input') ?? '';
 
     this.setState({
       search: trimmed,
@@ -74,7 +84,14 @@ class App extends React.Component<object, AppState> {
       fetch(url)
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Failed to fetch data');
+            if (response.status === 404) {
+              throw new ApiError('No characters found. Try another search term.', 404);
+            }
+
+            throw new ApiError(
+              `Request failed with status ${response.status}. Please try again later.`,
+              response.status
+            );
           }
           return response.json();
         })
@@ -84,10 +101,15 @@ class App extends React.Component<object, AppState> {
             isLoading: false,
           });
         })
-        .catch(() => {
+        .catch((error: unknown) => {
+          const message =
+            error instanceof ApiError
+              ? error.message
+              : 'Unable to load characters right now. Check your connection and try again.';
+
           this.setState({
             isLoading: false,
-            error: 'No characters found. Try another search term.',
+            error: message,
             items: [],
           });
         });
