@@ -2,6 +2,8 @@ import React from 'react';
 import { Search } from './components/Search';
 import { Results } from './components/Results';
 import './App.css';
+import ErrorBoundary from './components/ErrorBoundary';
+import ErrorButton from './components/ErrorButton';
 
 interface AppState {
   search: string;
@@ -95,16 +97,19 @@ class App extends React.Component<object, AppState> {
   render() {
     return (
       <>
-        <Search
-          value={this.state.search}
-          onChange={this.handleSearch}
-          onSearch={this.handleSearchClick}
-        />
-        <Results
-          items={this.state.items}
-          isLoading={this.state.isLoading}
-          error={this.state.error}
-        />
+        <ErrorBoundary>
+          <Search
+            value={this.state.search}
+            onChange={this.handleSearch}
+            onSearch={this.handleSearchClick}
+          />
+          <Results
+            items={this.state.items}
+            isLoading={this.state.isLoading}
+            error={this.state.error}
+          />
+          <ErrorButton />
+        </ErrorBoundary>
       </>
     );
   }
