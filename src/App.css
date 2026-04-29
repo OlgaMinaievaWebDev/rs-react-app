@@ -1,22 +1,11 @@
 #root {
   width: min(1000px, 100%);
   min-height: 100vh;
+  margin: 0 auto;
+  padding: 32px;
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 24px;
 }
 
-.search-section {
-  width: 100%;
-  padding: 16px;
-  border: 1px solid black;
-  border-radius: 8px;
-}
 
-.results-section {
-  width: 100%;
-  padding: 16px;
-  border-radius: 8px;
-  border: 1px solid red;
-}

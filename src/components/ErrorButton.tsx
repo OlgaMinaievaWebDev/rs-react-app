@@ -1,4 +1,5 @@
 import React from 'react';
+import './ErrorButton.css';
 
 interface ErrorButtonState {
   shouldThrow: boolean;
@@ -20,8 +21,12 @@ export default class ErrorButton extends React.Component<
 
   render() {
     if (this.state.shouldThrow) {
-      throw new Error('error');
+      throw new Error('Test error');
     }
-    return <button onClick={this.handleClick}>Trigger Error</button>;
+    return (
+      <button className="error-button" onClick={this.handleClick}>
+        Trigger Error
+      </button>
+    );
   }
 }
