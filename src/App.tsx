@@ -1,16 +1,8 @@
-import React from 'react';
-import { Search } from './components/Search';
-import { Results } from './components/Results';
+import Search from './components/Search';
+import Results from './components/Results';
 import './App.css';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorButton from './components/ErrorButton';
-
-interface AppState {
-  search: string;
-  items: Character[];
-  isLoading: boolean;
-  error: string | null;
-}
 
 export interface Character {
   id: number;
@@ -32,51 +24,17 @@ class ApiError extends Error {
   }
 }
 
-class App extends React.Component<object, AppState> {
-  state: AppState = {
-    search: '',
-    items: [],
-    isLoading: false,
-    error: null,
-  };
+export function App() {
+  const [search, setSearch] = useState(() => {
+    return localStorage.getItem('input') ?? '';
+  });
+  const [items, setItems] = useState<Character[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  componentDidMount(): void {
-    const savedInput = localStorage.getItem('input') ?? '';
-
-    this.setState({
-      search: savedInput,
-    });
-
-    this.fetchItems(savedInput);
-  }
-
-  handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      search: e.target.value,
-    });
-  };
-
-  handleSearchClick = () => {
-    const trimmed = this.state.search.trim();
-    const saved = localStorage.getItem('input') ?? '';
-
-    this.setState({
-      search: trimmed,
-    });
-
-    if (trimmed === saved) {
-      return;
-    }
-
-    localStorage.setItem('input', trimmed);
-    this.fetchItems(trimmed);
-  };
-
-  fetchItems = (searchItems: string) => {
-    this.setState({
-      isLoading: true,
-      error: null,
-    });
+  const fetchItems = (searchItems: string) => {
+    setIsLoading(true);
+    setError(null);
     const baseUrl = 'https://rickandmortyapi.com/api/character';
     const params = new URLSearchParams({ page: '1' });
 
@@ -91,7 +49,10 @@ class App extends React.Component<object, AppState> {
         .then((response) => {
           if (!response.ok) {
             if (response.status === 404) {
-              throw new ApiError('No characters found. Try another search term.', 404);
+              throw new ApiError(
+                'No characters found. Try another search term.',
+                404
+              );
             }
 
             throw new ApiError(
@@ -102,10 +63,8 @@ class App extends React.Component<object, AppState> {
           return response.json();
         })
         .then((data: CharactersResponse) => {
-          this.setState({
-            items: data.results,
-            isLoading: false,
-          });
+          setItems(data.results);
+          setIsLoading(false);
         })
         .catch((error: unknown) => {
           const message =
@@ -113,34 +72,44 @@ class App extends React.Component<object, AppState> {
               ? error.message
               : 'Unable to load characters right now. Check your connection and try again.';
 
-          this.setState({
-            isLoading: false,
-            error: message,
-            items: [],
-          });
+          setIsLoading(false);
+          setError(message);
+          setItems([]);
         });
     }, 300);
   };
 
-  render() {
-    return (
-      <>
-        <ErrorBoundary>
-          <Search
-            value={this.state.search}
-            onChange={this.handleSearch}
-            onSearch={this.handleSearchClick}
-          />
-          <Results
-            items={this.state.items}
-            isLoading={this.state.isLoading}
-            error={this.state.error}
-          />
-          <ErrorButton />
-        </ErrorBoundary>
-      </>
-    );
-  }
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
+  const handleSearchClick = () => {
+    const trimmed = search.trim();
+    const saved = localStorage.getItem('input') ?? '';
+
+    setSearch(trimmed);
+
+    if (trimmed === saved) {
+      return;
+    }
+
+    localStorage.setItem('input', trimmed);
+    fetchItems(trimmed);
+  };
+
+  return (
+    <>
+      <ErrorBoundary>
+        <Search
+          value={search}
+          onChange={handleSearch}
+          onSearch={handleSearchClick}
+        />
+        <Results items={items} isLoading={isLoading} error={error} />
+        <ErrorButton />
+      </ErrorBoundary>
+    </>
+  );
 }
 
 export default App;

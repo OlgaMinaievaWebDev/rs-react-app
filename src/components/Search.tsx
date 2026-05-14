@@ -5,23 +5,20 @@ interface SearchProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSearch: () => void;
 }
-export class Search extends React.Component<SearchProps> {
-  render() {
-    const { value, onChange, onSearch } = this.props;
 
-    return (
-      <header className="search-section">
-        <input
-          value={value}
-          onChange={onChange}
-          className="search-input"
-          type="text"
-          placeholder="Search for item"
-        />
-        <button className="search-button" type="button" onClick={onSearch}>
-          Search
-        </button>
-      </header>
-    );
-  }
+export default function Search({ value, onChange, onSearch }: SearchProps) {
+  return (
+    <header className="search-section">
+      <input
+        value={value}
+        onChange={onChange}
+        className="search-input"
+        type="text"
+        placeholder="Search for item"
+      />
+      <button className="search-button" type="button" onClick={onSearch}>
+        Search
+      </button>
+    </header>
+  );
 }
