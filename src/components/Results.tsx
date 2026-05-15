@@ -1,4 +1,5 @@
-import type { Character } from '../App';
+import { Link } from 'react-router-dom';
+import type { Character } from '../pages/Home';
 import './Results.css';
 
 interface ResultsProps {
@@ -25,12 +26,12 @@ export default function Results({ items, isLoading, error }: ResultsProps) {
   return (
     <section className="results-section">
       {items.map((item) => (
-        <article className="result-card" key={item.id}>
+        <Link to={`details/${item.id}`} className="result-card" key={item.id}>
           <h3>Name: {item.name}</h3>
           <p>
             Description: {item.species} character with {item.status} status.
           </p>
-        </article>
+        </Link>
       ))}
     </section>
   );

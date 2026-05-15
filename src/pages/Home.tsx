@@ -80,6 +80,8 @@ export function Home() {
         });
     }, 300);
   };
+
+  
   useEffect(() => {
 
     const baseUrl = 'https://rickandmortyapi.com/api/character';
