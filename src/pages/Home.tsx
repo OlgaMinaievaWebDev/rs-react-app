@@ -6,6 +6,7 @@ import Search from '../components/Search';
 import './../App.css';
 import { useEffect, useState } from 'react';
 
+
 export interface Character {
   id: number;
   name: string;
@@ -81,24 +82,22 @@ export function Home() {
     }, 300);
   };
 
-  
   useEffect(() => {
-
     const baseUrl = 'https://rickandmortyapi.com/api/character';
     const params = new URLSearchParams({ page: '1' });
-    
+
     if (search) {
       params.set('name', search);
     }
-    
+
     const url = `${baseUrl}/?${params.toString()}`;
-    
+
     setTimeout(() => {
       fetch(url)
-      .then((response) => response.json())
-      .then((data: CharactersResponse) => {
-        setItems(data.results);
-      });
+        .then((response) => response.json())
+        .then((data: CharactersResponse) => {
+          setItems(data.results);
+        });
     }, 300);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
