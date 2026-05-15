@@ -2,6 +2,7 @@ import '@testing-library/jest-dom';
 import { describe, expect, it } from 'vitest';
 import { screen, render } from '@testing-library/react';
 import Results from './Results';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('Results component', () => {
   it('should show loading state', () => {
@@ -17,7 +18,11 @@ describe('Results component', () => {
     expect(errorMessage).toBeInTheDocument();
   });
   it('should show empty state when there are no items', () => {
-    render(<Results items={[]} isLoading={false} error={null} />);
+    render(
+      <MemoryRouter>
+        <Results items={[]} isLoading={false} error={null} />;
+      </MemoryRouter>
+    );
     const emptyMessage = screen.getByText('No results');
     expect(emptyMessage).toBeInTheDocument();
   });
@@ -28,7 +33,11 @@ describe('Results component', () => {
       species: 'Human',
       status: 'Alive',
     };
-    render(<Results items={[item]} isLoading={false} error={null} />);
+    render(
+      <MemoryRouter>
+        <Results items={[item]} isLoading={false} error={null} />
+      </MemoryRouter>
+    );
     const name = screen.getByText(`Name: ${item.name}`);
     const description = screen.getByText(
       `Description: ${item.species} character with ${item.status} status.`
