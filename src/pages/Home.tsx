@@ -1,11 +1,10 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useSearchParams, useNavigate } from 'react-router-dom';
 import ErrorBoundary from '../components/ErrorBoundary';
 import ErrorButton from '../components/ErrorButton';
 import Results from '../components/Results';
 import Search from '../components/Search';
 import './../App.css';
 import { useEffect, useState } from 'react';
-
 
 export interface Character {
   id: number;
@@ -18,50 +17,47 @@ interface CharactersResponse {
   results: Character[];
 }
 
-class ApiError extends Error {
-  status: number;
-
-  constructor(message: string, status: number) {
-    super(message);
-    this.status = status;
-  }
-}
-
 export function Home() {
   const [search, setSearch] = useState(() => {
     return localStorage.getItem('input') ?? '';
   });
+  const [submittedSearch, setSubmittedSearch] = useState(() => {
+    return localStorage.getItem('input') ?? '';
+  });
+
   const [items, setItems] = useState<Character[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchItems = (searchItems: string) => {
-    setIsLoading(true);
-    setError(null);
-    const baseUrl = 'https://rickandmortyapi.com/api/character';
-    const params = new URLSearchParams({ page: '1' });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageParam = searchParams.get('page');
+  const parsedPage = Number(pageParam);
+  const currentPage = parsedPage > 0 ? parsedPage : 1;
 
-    if (searchItems) {
-      params.set('name', searchItems);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!pageParam) {
+      setSearchParams({ page: '1' });
     }
+  }, [pageParam, setSearchParams]);
 
+  useEffect(() => {
+    const baseUrl = 'https://rickandmortyapi.com/api/character';
+    const params = new URLSearchParams({ page: currentPage.toString() });
+
+    if (submittedSearch) {
+      params.set('name', submittedSearch);
+    }
     const url = `${baseUrl}/?${params.toString()}`;
 
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
+      setIsLoading(true);
+      setError(null);
       fetch(url)
         .then((response) => {
           if (!response.ok) {
-            if (response.status === 404) {
-              throw new ApiError(
-                'No characters found. Try another search term.',
-                404
-              );
-            }
-
-            throw new ApiError(
-              `Request failed with status ${response.status}. Please try again later.`,
-              response.status
-            );
+            throw new Error('Request failed');
           }
           return response.json();
         })
@@ -69,38 +65,16 @@ export function Home() {
           setItems(data.results);
           setIsLoading(false);
         })
-        .catch((error: unknown) => {
-          const message =
-            error instanceof ApiError
-              ? error.message
-              : 'Unable to load characters right now. Check your connection and try again.';
-
+        .catch(() => {
           setIsLoading(false);
-          setError(message);
+          setError(
+            'Unable to load characters right now. Check your connection and try again.'
+          );
           setItems([]);
         });
     }, 300);
-  };
-
-  useEffect(() => {
-    const baseUrl = 'https://rickandmortyapi.com/api/character';
-    const params = new URLSearchParams({ page: '1' });
-
-    if (search) {
-      params.set('name', search);
-    }
-
-    const url = `${baseUrl}/?${params.toString()}`;
-
-    setTimeout(() => {
-      fetch(url)
-        .then((response) => response.json())
-        .then((data: CharactersResponse) => {
-          setItems(data.results);
-        });
-    }, 300);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return () => clearTimeout(timeoutId);
+  }, [submittedSearch, currentPage]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -111,13 +85,15 @@ export function Home() {
     const saved = localStorage.getItem('input') ?? '';
 
     setSearch(trimmed);
+    setSubmittedSearch(trimmed);
+
+    navigate('/?page=1');
 
     if (trimmed === saved) {
       return;
     }
 
     localStorage.setItem('input', trimmed);
-    fetchItems(trimmed);
   };
 
   return (

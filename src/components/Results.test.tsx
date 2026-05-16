@@ -6,13 +6,19 @@ import { MemoryRouter } from 'react-router-dom';
 
 describe('Results component', () => {
   it('should show loading state', () => {
-    const { container } = render(<Results items={[]} isLoading error={null} />);
+    const { container } = render(
+      <MemoryRouter>
+        <Results items={[]} isLoading error={null} />
+      </MemoryRouter>
+    );
     const loader = container.querySelector('.loader');
     expect(loader).toBeInTheDocument();
   });
   it('should show error message', () => {
     render(
-      <Results items={[]} isLoading={false} error="Something went wrong" />
+      <MemoryRouter>
+        <Results items={[]} isLoading={false} error="Something went wrong" />
+      </MemoryRouter>
     );
     const errorMessage = screen.getByText('Something went wrong');
     expect(errorMessage).toBeInTheDocument();

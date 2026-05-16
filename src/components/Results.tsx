@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import type { Character } from '../pages/Home';
 import './Results.css';
 
@@ -8,6 +8,9 @@ interface ResultsProps {
   error: string | null;
 }
 export default function Results({ items, isLoading, error }: ResultsProps) {
+  const [searchParams] = useSearchParams();
+  const params = searchParams.toString();
+
   if (isLoading) {
     return (
       <section className="results-section">
@@ -26,7 +29,11 @@ export default function Results({ items, isLoading, error }: ResultsProps) {
   return (
     <section className="results-section">
       {items.map((item) => (
-        <Link to={`details/${item.id}`} className="result-card" key={item.id}>
+        <Link
+          to={`details/${item.id}?${params}`}
+          className="result-card"
+          key={item.id}
+        >
           <h3>Name: {item.name}</h3>
           <p>
             Description: {item.species} character with {item.status} status.
