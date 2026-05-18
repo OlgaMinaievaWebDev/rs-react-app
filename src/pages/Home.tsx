@@ -10,6 +10,7 @@ import Results from '../components/Results';
 import Search from '../components/Search';
 import './../App.css';
 import { useEffect, useState } from 'react';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 export interface Character {
   id: number;
@@ -24,12 +25,8 @@ interface CharactersResponse {
 }
 
 export function Home() {
-  const [search, setSearch] = useState(() => {
-    return localStorage.getItem('input') ?? '';
-  });
-  const [submittedSearch, setSubmittedSearch] = useState(() => {
-    return localStorage.getItem('input') ?? '';
-  });
+  const [search, setSearch] = useLocalStorage('input');
+  const [submittedSearch, setSubmittedSearch] = useState(search);
 
   const [items, setItems] = useState<Character[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -93,18 +90,9 @@ export function Home() {
 
   const handleSearchClick = () => {
     const trimmed = search.trim();
-    const saved = localStorage.getItem('input') ?? '';
-
     setSearch(trimmed);
     setSubmittedSearch(trimmed);
-
     navigate('/?page=1');
-
-    if (trimmed === saved) {
-      return;
-    }
-
-    localStorage.setItem('input', trimmed);
   };
 
   const handleNextClick = () => {
@@ -139,14 +127,14 @@ export function Home() {
                 current page {currentPage} of {totalPages} pages
               </p>
             )}
+            <button onClick={handlePrevClick} disabled={currentPage === 1}>
+              Prev
+            </button>
             <button
               onClick={handleNextClick}
               disabled={currentPage === totalPages}
             >
               Next
-            </button>
-            <button onClick={handlePrevClick} disabled={currentPage === 1}>
-              Prev
             </button>
             <Results items={items} isLoading={isLoading} error={error} />
           </div>
