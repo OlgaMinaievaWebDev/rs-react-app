@@ -7,3 +7,25 @@
   flex-direction: column;
   gap: 24px;
 }
+
+.main-layout {
+  display: block;
+}
+
+.main-layout.details-open {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.main-layout .left {
+  width: 100%;
+}
+
+.main-layout.details-open .left {
+  flex: 0 0 70%;
+}
+
+.main-layout.details-open .right {
+  flex: 0 0 30%;
+}

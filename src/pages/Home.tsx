@@ -1,4 +1,9 @@
-import { Outlet, useSearchParams, useNavigate } from 'react-router-dom';
+import {
+  Outlet,
+  useSearchParams,
+  useNavigate,
+  useLocation,
+} from 'react-router-dom';
 import ErrorBoundary from '../components/ErrorBoundary';
 import ErrorButton from '../components/ErrorButton';
 import Results from '../components/Results';
@@ -36,7 +41,10 @@ export function Home() {
   const parsedPage = Number(pageParam);
   const currentPage = parsedPage > 0 ? parsedPage : 1;
 
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const isDetails = location.pathname.includes('/details');
 
   useEffect(() => {
     if (!pageParam) {
@@ -121,20 +129,32 @@ export function Home() {
           onChange={handleSearch}
           onSearch={handleSearchClick}
         />
-        {!isLoading && !error && items.length > 0 && (
-          <p>
-            {' '}
-            current page {currentPage} of {totalPages} pages
-          </p>
-        )}
-        <button onClick={handleNextClick} disabled={currentPage === totalPages}>
-          Next
-        </button>
-        <button onClick={handlePrevClick} disabled={currentPage === 1}>
-          Prev
-        </button>
-        <Results items={items} isLoading={isLoading} error={error} />
-        <Outlet />
+        <main
+          className={isDetails ? 'main-layout details-open' : 'main-layout'}
+        >
+          <div className="left">
+            {!isLoading && !error && items.length > 0 && (
+              <p>
+                {' '}
+                current page {currentPage} of {totalPages} pages
+              </p>
+            )}
+            <button
+              onClick={handleNextClick}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+            <button onClick={handlePrevClick} disabled={currentPage === 1}>
+              Prev
+            </button>
+            <Results items={items} isLoading={isLoading} error={error} />
+          </div>
+
+          <div className="right">
+            <Outlet />
+          </div>
+        </main>
         <ErrorButton />
       </ErrorBoundary>
     </>
