@@ -7,7 +7,11 @@ interface ResultsProps {
   isLoading: boolean;
   error: string | null;
 }
-export default function Results({ items, isLoading, error }: ResultsProps) {
+export default function Results({
+  items,
+  isLoading,
+  error,
+}: ResultsProps) {
   const [searchParams] = useSearchParams();
   const params = searchParams.toString();
 
@@ -40,6 +44,7 @@ export default function Results({ items, isLoading, error }: ResultsProps) {
           </p>
         </Link>
       ))}
+    
     </section>
   );
 }

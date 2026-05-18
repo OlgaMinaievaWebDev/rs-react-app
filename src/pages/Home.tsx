@@ -15,6 +15,7 @@ export interface Character {
 
 interface CharactersResponse {
   results: Character[];
+  info: { pages: number };
 }
 
 export function Home() {
@@ -28,6 +29,7 @@ export function Home() {
   const [items, setItems] = useState<Character[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [totalPages, setTotalPages] = useState(1);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const pageParam = searchParams.get('page');
@@ -63,6 +65,7 @@ export function Home() {
         })
         .then((data: CharactersResponse) => {
           setItems(data.results);
+          setTotalPages(data.info.pages);
           setIsLoading(false);
         })
         .catch(() => {
@@ -96,6 +99,20 @@ export function Home() {
     localStorage.setItem('input', trimmed);
   };
 
+  const handleNextClick = () => {
+    const nextPage = currentPage + 1;
+    if (currentPage < totalPages) {
+      navigate(`?page=${nextPage}`);
+    }
+  };
+
+  const handlePrevClick = () => {
+    const prevPage = currentPage - 1;
+    if (currentPage > 1) {
+      navigate(`?page=${prevPage}`);
+    }
+  };
+
   return (
     <>
       <ErrorBoundary>
@@ -104,6 +121,18 @@ export function Home() {
           onChange={handleSearch}
           onSearch={handleSearchClick}
         />
+        {!isLoading && !error && items.length > 0 && (
+          <p>
+            {' '}
+            current page {currentPage} of {totalPages} pages
+          </p>
+        )}
+        <button onClick={handleNextClick} disabled={currentPage === totalPages}>
+          Next
+        </button>
+        <button onClick={handlePrevClick} disabled={currentPage === 1}>
+          Prev
+        </button>
         <Results items={items} isLoading={isLoading} error={error} />
         <Outlet />
         <ErrorButton />
