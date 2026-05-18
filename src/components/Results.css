@@ -6,10 +6,22 @@
 }
 
 .result-card {
+  display: block;
   padding: 16px;
   border: 1px solid #e2e2e2;
   border-radius: 10px;
   margin-bottom: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.result-card h3,
+.result-card p {
+  margin: 0;
+}
+
+.result-card h3 {
+  margin-bottom: 8px;
 }
 
 .loader {

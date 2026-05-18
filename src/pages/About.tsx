@@ -1,6 +1,8 @@
+import './About.css';
+
 export default function About() {
   return (
-    <div>
+    <section className="about-page">
       <h2>About</h2>
 
       <p>Created by Olga Minaieva.</p>
@@ -19,6 +21,6 @@ export default function About() {
       >
         RS School React Course
       </a>
-    </div>
+    </section>
   );
 }

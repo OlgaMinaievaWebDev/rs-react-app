@@ -1,0 +1,36 @@
+.details-panel {
+  border: 1px solid #d7dfe8;
+  border-radius: 16px;
+  padding: 20px;
+  background: #f8fbff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.details-panel h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  color: #1f2a37;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d7dfe8;
+}
+
+.details-panel p {
+  margin: 0;
+}
+
+.details-close-button {
+  align-self: flex-start;
+  margin-top: 8px;
+  border: 1px solid #c7d3e0;
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.details-close-button:hover {
+  background: #eef5fb;
+}

@@ -122,20 +122,21 @@ export function Home() {
         >
           <div className="left">
             {!isLoading && !error && items.length > 0 && (
-              <p>
-                {' '}
-                current page {currentPage} of {totalPages} pages
-              </p>
+              <div className="pagination-controls">
+                <button onClick={handlePrevClick} disabled={currentPage === 1}>
+                  Prev
+                </button>
+                <p className="pagination-label">
+                  Page {currentPage} of {totalPages}
+                </p>
+                <button
+                  onClick={handleNextClick}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
+              </div>
             )}
-            <button onClick={handlePrevClick} disabled={currentPage === 1}>
-              Prev
-            </button>
-            <button
-              onClick={handleNextClick}
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
             <Results items={items} isLoading={isLoading} error={error} />
           </div>
 

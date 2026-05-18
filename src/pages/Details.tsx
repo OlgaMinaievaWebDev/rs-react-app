@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import type { Character } from './Home';
+import './Details.css';
 
 export default function Details() {
   const [isLoading, setIsLoading] = useState(true);
@@ -62,11 +63,13 @@ export default function Details() {
   
 
   return (
-    <div>
-      <p>{character.name}</p>
-      <p>{character.species}</p>
-      <p>{character.status}</p>
-      <button onClick={handleClose}>Close</button>
+    <div className="details-panel">
+      <h2>{character.name}</h2>
+      <p>Species: {character.species}</p>
+      <p>Status: {character.status}</p>
+      <button className="details-close-button" onClick={handleClose}>
+        Close
+      </button>
     </div>
   );
 }

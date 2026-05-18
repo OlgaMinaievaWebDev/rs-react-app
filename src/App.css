@@ -29,3 +29,28 @@
 .main-layout.details-open .right {
   flex: 0 0 30%;
 }
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.pagination-label {
+  margin: 0;
+  font-weight: 600;
+}
+
+.pagination-controls button {
+  border: 1px solid #c7d3e0;
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.pagination-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
