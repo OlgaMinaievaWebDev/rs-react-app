@@ -6,8 +6,7 @@ export default function Details() {
   const [isLoading, setIsLoading] = useState(true);
   const [character, setCharacter] = useState<Character | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const params = useParams();
-  const userId = params.id as string;
+  const { id } = useParams();
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -21,12 +20,18 @@ export default function Details() {
       navigate('/');
     }
   };
-  console.log(queryString);
+
   useEffect(() => {
     const baseUrl = 'https://rickandmortyapi.com/api/character';
-    const url = `${baseUrl}/${userId}`;
+    if (!id) return;
+    const url = `${baseUrl}/${id}`;
     fetch(url)
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Request failed');
+        }
+        return response.json();
+      })
       .then((data: Character) => {
         setIsLoading(false);
         setCharacter(data);
@@ -36,8 +41,12 @@ export default function Details() {
         setError(message);
         setIsLoading(false);
       });
-  }, [userId]);
+  }, [id]);
 
+  if (!id) {
+    return <p>Unable to load character.</p>;
+  }
+  
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -49,6 +58,8 @@ export default function Details() {
   if (!character) {
     return <p>No character</p>;
   }
+
+  
 
   return (
     <div>
