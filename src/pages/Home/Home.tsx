@@ -39,6 +39,7 @@ const fetchCharacter = async (
 
 export function Home() {
   const [search, setSearch] = useLocalStorage('input');
+  const [activeSearch, setActiveSearch] = useState(search);
 
   const [items, setItems] = useState<Character[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,28 +63,25 @@ export function Home() {
   }, [pageParam, setSearchParams]);
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      const loadCharacters = async () => {
-        try {
-          setIsLoading(true);
-          setError(null);
-          const data = await fetchCharacter(search, currentPage);
-          setItems(data.results);
-          setTotalPages(data.info.pages);
-        } catch {
-          setError(
-            'Unable to load characters right now. Check your connection and try again.'
-          );
-          setItems([]);
-        } finally {
-          setIsLoading(false);
-        }
-      };
+    const loadCharacters = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const data = await fetchCharacter(activeSearch, currentPage);
+        setItems(data.results);
+        setTotalPages(data.info.pages);
+      } catch {
+        setError(
+          'Unable to load characters right now. Check your connection and try again.'
+        );
+        setItems([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-      void loadCharacters();
-    }, 300);
-    return () => clearTimeout(timeoutId);
-  }, [search, currentPage]);
+    void loadCharacters();
+  }, [activeSearch, currentPage]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -92,6 +90,7 @@ export function Home() {
   const handleSearchClick = () => {
     const trimmed = search.trim();
     setSearch(trimmed);
+    setActiveSearch(trimmed);
     navigate('/?page=1');
   };
 
