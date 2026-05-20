@@ -1,19 +1,25 @@
+import { useEffect, useState } from 'react';
 import {
   Outlet,
-  useSearchParams,
-  useNavigate,
   useLocation,
+  useNavigate,
+  useSearchParams,
 } from 'react-router-dom';
-
-import { useEffect, useState } from 'react';
-import useLocalStorage from '../../hooks/useLocalStorage';
-import './../../App.css';
 
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import { ErrorButton } from '../../components/ErrorButton';
 import { Results } from '../../components/Results';
 import { Search } from '../../components/Search';
+import useLocalStorage from '../../hooks/useLocalStorage';
 import type { Character, CharactersResponse } from './Home.interfaces';
+import {
+  StyledDetailsColumn,
+  StyledMainLayout,
+  StyledPaginationButton,
+  StyledPaginationControls,
+  StyledPaginationLabel,
+  StyledResultsColumn,
+} from './Home.styles';
 
 export function Home() {
   const [search, setSearch] = useLocalStorage('input');
@@ -108,33 +114,34 @@ export function Home() {
           onChange={handleSearch}
           onSearch={handleSearchClick}
         />
-        <main
-          className={isDetails ? 'main-layout details-open' : 'main-layout'}
-        >
-          <div className="left">
+        <StyledMainLayout $isDetailsOpen={isDetails}>
+          <StyledResultsColumn $isDetailsOpen={isDetails}>
             {!isLoading && !error && items.length > 0 && (
-              <div className="pagination-controls">
-                <button onClick={handlePrevClick} disabled={currentPage === 1}>
+              <StyledPaginationControls>
+                <StyledPaginationButton
+                  onClick={handlePrevClick}
+                  disabled={currentPage === 1}
+                >
                   Prev
-                </button>
-                <p className="pagination-label">
+                </StyledPaginationButton>
+                <StyledPaginationLabel>
                   Page {currentPage} of {totalPages}
-                </p>
-                <button
+                </StyledPaginationLabel>
+                <StyledPaginationButton
                   onClick={handleNextClick}
                   disabled={currentPage === totalPages}
                 >
                   Next
-                </button>
-              </div>
+                </StyledPaginationButton>
+              </StyledPaginationControls>
             )}
             <Results items={items} isLoading={isLoading} error={error} />
-          </div>
+          </StyledResultsColumn>
 
-          <div className="right">
+          <StyledDetailsColumn>
             <Outlet />
-          </div>
-        </main>
+          </StyledDetailsColumn>
+        </StyledMainLayout>
         <ErrorButton />
       </ErrorBoundary>
     </>

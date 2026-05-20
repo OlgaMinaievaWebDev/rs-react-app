@@ -3,7 +3,7 @@ import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
 import type { Character } from '../Home/Home.interfaces';
 
-import './Details.css';
+import { StyledCloseButton, StyledHeader, StyledPanel } from './Details.styles';
 
 export function Details() {
   const [isLoading, setIsLoading] = useState(true);
@@ -63,13 +63,11 @@ export function Details() {
   }
 
   return (
-    <div className="details-panel">
-      <h2>{character.name}</h2>
+    <StyledPanel>
+      <StyledHeader>{character.name}</StyledHeader>
       <p>Species: {character.species}</p>
       <p>Status: {character.status}</p>
-      <button className="details-close-button" onClick={handleClose}>
-        Close
-      </button>
-    </div>
+      <StyledCloseButton onClick={handleClose}>Close</StyledCloseButton>
+    </StyledPanel>
   );
 }

@@ -1,19 +1,23 @@
 import type { SearchProps } from './Search.interfaces';
-import './Search.css';
+
+import {
+  StyledInput,
+  StyledSearchButton,
+  StyledSearchHeader,
+} from './Search.styles';
 
 export function Search({ value, onChange, onSearch }: SearchProps) {
   return (
-    <header className="search-section">
-      <input
+    <StyledSearchHeader>
+      <StyledInput
         value={value}
         onChange={onChange}
-        className="search-input"
         type="text"
         placeholder="Search for item"
       />
-      <button className="search-button" type="button" onClick={onSearch}>
+      <StyledSearchButton type="button" onClick={onSearch}>
         Search
-      </button>
-    </header>
+      </StyledSearchButton>
+    </StyledSearchHeader>
   );
 }

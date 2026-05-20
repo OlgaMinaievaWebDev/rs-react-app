@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import './ErrorButton.css';
+
+import { StyledErrorButton } from './ErrorButton.styles';
 
 export function ErrorButton() {
   const [shouldThrow, setShouldThrow] = useState(false);
@@ -12,8 +13,6 @@ export function ErrorButton() {
     throw new Error('Test error');
   }
   return (
-    <button className="error-button" onClick={handleClick}>
-      Trigger Error
-    </button>
+    <StyledErrorButton onClick={handleClick}>Trigger Error</StyledErrorButton>
   );
 }

@@ -1,8 +1,9 @@
 import '@testing-library/jest-dom';
-import { describe, expect, it } from 'vitest';
-import { screen, render } from '@testing-library/react';
-import { Results } from './Results';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { describe, expect, it } from 'vitest';
+
+import { Results } from './Results';
 
 describe('Results component', () => {
   it('should show loading state', () => {

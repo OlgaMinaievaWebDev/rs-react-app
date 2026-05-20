@@ -1,12 +1,16 @@
-import { Link } from 'react-router-dom';
-import './NotFound.css';
+import {
+  StyledNotFoundHeader,
+  StyledNotFoundLink,
+  StyledNotFoundParagraph,
+  StyledNotFoundSection,
+} from './NotFound.styles';
 
 export function NotFound() {
   return (
-    <section className="not-found-page">
-      <h2>404</h2>
-      <p>Page not found</p>
-      <Link to={'/'}>Return Home</Link>
-    </section>
+    <StyledNotFoundSection>
+      <StyledNotFoundHeader>404</StyledNotFoundHeader>
+      <StyledNotFoundParagraph>Page not found</StyledNotFoundParagraph>
+      <StyledNotFoundLink to={'/'}>Return Home</StyledNotFoundLink>
+    </StyledNotFoundSection>
   );
 }

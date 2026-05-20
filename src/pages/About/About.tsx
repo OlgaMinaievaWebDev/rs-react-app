@@ -1,26 +1,31 @@
-import './About.css';
+import {
+  StyledAboutHeader,
+  StyledAboutLink,
+  StyledAboutParagraph,
+  StyledSectionAbout,
+} from './About.styles';
 
 export function About() {
   return (
-    <section className="about-page">
-      <h2>About</h2>
+    <StyledSectionAbout>
+      <StyledAboutHeader>About</StyledAboutHeader>
 
-      <p>Created by Olga Minaieva.</p>
+      <StyledAboutParagraph>Created by Olga Minaieva.</StyledAboutParagraph>
 
-      <p>
+      <StyledAboutParagraph>
         This application demonstrates converting class components to functional
         components with React hooks and implementing routing functionality with
         React Router, including nested routes, detailed views, and URL-based
         navigation.
-      </p>
+      </StyledAboutParagraph>
 
-      <a
+      <StyledAboutLink
         href="https://rs.school/courses/reactjs"
         target="_blank"
         rel="noreferrer"
       >
         RS School React Course
-      </a>
-    </section>
+      </StyledAboutLink>
+    </StyledSectionAbout>
   );
 }

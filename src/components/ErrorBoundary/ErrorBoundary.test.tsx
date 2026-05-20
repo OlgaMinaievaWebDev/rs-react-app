@@ -1,8 +1,9 @@
-import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import ErrorBoundary from './ErrorBoundary';
-import { ErrorButton } from '../ErrorButton';
 import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+
+import { ErrorButton } from '../ErrorButton';
+import ErrorBoundary from './ErrorBoundary';
 
 describe('ErrorBoundary component', () => {
   it('renders children before error', () => {
