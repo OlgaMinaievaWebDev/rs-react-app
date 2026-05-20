@@ -5,6 +5,16 @@ import type { Character } from '../Home/Home.interfaces';
 
 import { StyledCloseButton, StyledHeader, StyledPanel } from './Details.styles';
 
+const fetchCharacter = async (id: string): Promise<Character> => {
+  const baseUrl = 'https://rickandmortyapi.com/api/character';
+  const response = await fetch(`${baseUrl}/${id}`);
+  if (!response.ok) {
+    throw new Error('Request failed');
+  }
+  const data: Character = await response.json();
+  return data;
+};
+
 export function Details() {
   const [isLoading, setIsLoading] = useState(true);
   const [character, setCharacter] = useState<Character | null>(null);
@@ -25,25 +35,22 @@ export function Details() {
   };
 
   useEffect(() => {
-    const baseUrl = 'https://rickandmortyapi.com/api/character';
     if (!id) return;
-    const url = `${baseUrl}/${id}`;
-    fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Request failed');
-        }
-        return response.json();
-      })
-      .then((data: Character) => {
-        setIsLoading(false);
+
+    const loadCharacter = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const data = await fetchCharacter(id);
         setCharacter(data);
-      })
-      .catch(() => {
-        const message = 'Unable to load character.';
-        setError(message);
+      } catch {
+        setError('Unable to load character.');
+      } finally {
         setIsLoading(false);
-      });
+      }
+    };
+
+    void loadCharacter();
   }, [id]);
 
   if (!id) {

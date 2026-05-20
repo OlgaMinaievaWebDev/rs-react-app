@@ -21,9 +21,24 @@ import {
   StyledResultsColumn,
 } from './Home.styles';
 
+const fetchCharacter = async (
+  searchTerm: string,
+  page: number
+): Promise<CharactersResponse> => {
+  const baseUrl = 'https://rickandmortyapi.com/api/character';
+  const params = new URLSearchParams({ page: page.toString() });
+  if (searchTerm) {
+    params.set('name', searchTerm);
+  }
+  const url = `${baseUrl}/?${params.toString()}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error('Request failed');
+  const data: CharactersResponse = await response.json();
+  return data;
+};
+
 export function Home() {
   const [search, setSearch] = useLocalStorage('input');
-  const [submittedSearch, setSubmittedSearch] = useState(search);
 
   const [items, setItems] = useState<Character[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,39 +62,28 @@ export function Home() {
   }, [pageParam, setSearchParams]);
 
   useEffect(() => {
-    const baseUrl = 'https://rickandmortyapi.com/api/character';
-    const params = new URLSearchParams({ page: currentPage.toString() });
-
-    if (submittedSearch) {
-      params.set('name', submittedSearch);
-    }
-    const url = `${baseUrl}/?${params.toString()}`;
-
     const timeoutId = setTimeout(() => {
-      setIsLoading(true);
-      setError(null);
-      fetch(url)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Request failed');
-          }
-          return response.json();
-        })
-        .then((data: CharactersResponse) => {
+      const loadCharacters = async () => {
+        try {
+          setIsLoading(true);
+          setError(null);
+          const data = await fetchCharacter(search, currentPage);
           setItems(data.results);
           setTotalPages(data.info.pages);
-          setIsLoading(false);
-        })
-        .catch(() => {
-          setIsLoading(false);
+        } catch {
           setError(
             'Unable to load characters right now. Check your connection and try again.'
           );
           setItems([]);
-        });
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      void loadCharacters();
     }, 300);
     return () => clearTimeout(timeoutId);
-  }, [submittedSearch, currentPage]);
+  }, [search, currentPage]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -88,7 +92,6 @@ export function Home() {
   const handleSearchClick = () => {
     const trimmed = search.trim();
     setSearch(trimmed);
-    setSubmittedSearch(trimmed);
     navigate('/?page=1');
   };
 
