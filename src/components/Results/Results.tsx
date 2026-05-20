@@ -1,17 +1,9 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import type { Character } from '../pages/Home';
+
+import type { ResultsProps } from './Result.interfaces';
 import './Results.css';
 
-interface ResultsProps {
-  items: Character[];
-  isLoading: boolean;
-  error: string | null;
-}
-export default function Results({
-  items,
-  isLoading,
-  error,
-}: ResultsProps) {
+export function Results({ items, isLoading, error }: ResultsProps) {
   const [searchParams] = useSearchParams();
   const params = searchParams.toString();
 
@@ -44,7 +36,6 @@ export default function Results({
           </p>
         </Link>
       ))}
-    
     </section>
   );
 }

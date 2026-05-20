@@ -4,25 +4,16 @@ import {
   useNavigate,
   useLocation,
 } from 'react-router-dom';
-import ErrorBoundary from '../components/ErrorBoundary';
-import ErrorButton from '../components/ErrorButton';
-import Results from '../components/Results';
-import Search from '../components/Search';
-import './../App.css';
+
 import { useEffect, useState } from 'react';
-import useLocalStorage from '../hooks/useLocalStorage';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import './../../App.css';
 
-export interface Character {
-  id: number;
-  name: string;
-  species: string;
-  status: string;
-}
-
-interface CharactersResponse {
-  results: Character[];
-  info: { pages: number };
-}
+import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import { ErrorButton } from '../../components/ErrorButton';
+import { Results } from '../../components/Results';
+import { Search } from '../../components/Search';
+import type { Character, CharactersResponse } from './Home.interfaces';
 
 export function Home() {
   const [search, setSearch] = useLocalStorage('input');
@@ -149,5 +140,3 @@ export function Home() {
     </>
   );
 }
-
-export default Home;

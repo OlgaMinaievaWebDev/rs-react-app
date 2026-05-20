@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { describe, expect, it } from 'vitest';
 import { screen, render } from '@testing-library/react';
-import Results from './Results';
+import { Results } from './Results';
 import { MemoryRouter } from 'react-router-dom';
 
 describe('Results component', () => {

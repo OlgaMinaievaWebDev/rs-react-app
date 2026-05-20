@@ -1,4 +1,4 @@
-import Details from './Details';
+import { Details } from './Details';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import ErrorBoundary from './ErrorBoundary';
-import ErrorButton from './ErrorButton';
+import { ErrorButton } from '../ErrorButton';
 import userEvent from '@testing-library/user-event';
 
 describe('ErrorBoundary component', () => {

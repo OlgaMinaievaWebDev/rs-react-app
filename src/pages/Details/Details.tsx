@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
-import type { Character } from './Home';
+
+import type { Character } from '../Home/Home.interfaces';
+
 import './Details.css';
 
-export default function Details() {
+export function Details() {
   const [isLoading, setIsLoading] = useState(true);
   const [character, setCharacter] = useState<Character | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -47,7 +49,7 @@ export default function Details() {
   if (!id) {
     return <p>Unable to load character.</p>;
   }
-  
+
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -59,8 +61,6 @@ export default function Details() {
   if (!character) {
     return <p>No character</p>;
   }
-
-  
 
   return (
     <div className="details-panel">

@@ -1,12 +1,7 @@
-import React from 'react';
+import type { SearchProps } from './Search.interfaces';
 import './Search.css';
-interface SearchProps {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSearch: () => void;
-}
 
-export default function Search({ value, onChange, onSearch }: SearchProps) {
+export function Search({ value, onChange, onSearch }: SearchProps) {
   return (
     <header className="search-section">
       <input
