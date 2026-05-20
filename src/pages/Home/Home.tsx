@@ -6,12 +6,13 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 
+import { fetchCharacters } from '../../api/characters';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import { ErrorButton } from '../../components/ErrorButton';
 import { Results } from '../../components/Results';
 import { Search } from '../../components/Search';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import type { Character, CharactersResponse } from './Home.interfaces';
+import type { Character } from './Home.interfaces';
 import {
   StyledDetailsColumn,
   StyledMainLayout,
@@ -20,22 +21,6 @@ import {
   StyledPaginationLabel,
   StyledResultsColumn,
 } from './Home.styles';
-
-const fetchCharacter = async (
-  searchTerm: string,
-  page: number
-): Promise<CharactersResponse> => {
-  const baseUrl = 'https://rickandmortyapi.com/api/character';
-  const params = new URLSearchParams({ page: page.toString() });
-  if (searchTerm) {
-    params.set('name', searchTerm);
-  }
-  const url = `${baseUrl}/?${params.toString()}`;
-  const response = await fetch(url);
-  if (!response.ok) throw new Error('Request failed');
-  const data: CharactersResponse = await response.json();
-  return data;
-};
 
 export function Home() {
   const [search, setSearch] = useLocalStorage('input');
@@ -67,7 +52,7 @@ export function Home() {
       try {
         setIsLoading(true);
         setError(null);
-        const data = await fetchCharacter(activeSearch, currentPage);
+        const data = await fetchCharacters(activeSearch, currentPage);
         setItems(data.results);
         setTotalPages(data.info.pages);
       } catch {

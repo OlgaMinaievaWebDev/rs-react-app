@@ -1,19 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
+import { fetchCharacterById } from '../../api/characters';
 import type { Character } from '../Home/Home.interfaces';
 
 import { StyledCloseButton, StyledHeader, StyledPanel } from './Details.styles';
-
-const fetchCharacter = async (id: string): Promise<Character> => {
-  const baseUrl = 'https://rickandmortyapi.com/api/character';
-  const response = await fetch(`${baseUrl}/${id}`);
-  if (!response.ok) {
-    throw new Error('Request failed');
-  }
-  const data: Character = await response.json();
-  return data;
-};
 
 export function Details() {
   const [isLoading, setIsLoading] = useState(true);
@@ -41,7 +32,7 @@ export function Details() {
       try {
         setIsLoading(true);
         setError(null);
-        const data = await fetchCharacter(id);
+        const data = await fetchCharacterById(id);
         setCharacter(data);
       } catch {
         setError('Unable to load character.');
