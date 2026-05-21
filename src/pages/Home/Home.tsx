@@ -103,7 +103,7 @@ export function Home() {
         />
         <StyledMainLayout $isDetailsOpen={isDetails}>
           <StyledResultsColumn $isDetailsOpen={isDetails}>
-            {!isLoading && !error && items.length > 0 && (
+            {!isLoading && !error && items.length && (
               <StyledPaginationControls>
                 <StyledPaginationButton
                   onClick={handlePrevClick}

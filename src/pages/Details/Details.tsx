@@ -4,7 +4,12 @@ import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { fetchCharacterById } from '../../api/characters';
 import type { Character } from '../Home/Home.interfaces';
 
-import { StyledCloseButton, StyledHeader, StyledPanel } from './Details.styles';
+import {
+  StyledCloseButton,
+  StyledHeader,
+  StyledLoadingIndicator,
+  StyledPanel,
+} from './Details.styles';
 
 export function Details() {
   const [isLoading, setIsLoading] = useState(true);
@@ -44,23 +49,18 @@ export function Details() {
     void loadCharacter();
   }, [id]);
 
-  if (!id) {
-    return <p>Unable to load character.</p>;
-  }
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
-
-  if (!character) {
-    return <p>No character</p>;
-  }
-
-  return (
+  return !id ? (
+    <p>Unable to load character.</p>
+  ) : isLoading ? (
+    <StyledPanel role="status" aria-label="Loading character details">
+      <StyledLoadingIndicator />
+      <p>Loading...</p>
+    </StyledPanel>
+  ) : error ? (
+    <p>{error}</p>
+  ) : !character ? (
+    <p>No character</p>
+  ) : (
     <StyledPanel>
       <StyledHeader>{character.name}</StyledHeader>
       <p>Species: {character.species}</p>

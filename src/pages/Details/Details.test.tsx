@@ -21,6 +21,9 @@ describe('Details component', () => {
       </MemoryRouter>
     );
     expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(
+      screen.getByRole('status', { name: /loading character details/i })
+    ).toBeInTheDocument();
   });
 
   it('renders character details after successful fetch', async () => {
