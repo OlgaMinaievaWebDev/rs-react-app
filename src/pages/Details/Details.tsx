@@ -61,6 +61,10 @@ export function Details() {
       <StyledHeader>{character.name}</StyledHeader>
       <p>Species: {character.species}</p>
       <p>Status: {character.status}</p>
+      <p>
+        Description: {character.species} character with {character.status}{' '}
+        status.
+      </p>
       <StyledCloseButton onClick={handleClose}>Close</StyledCloseButton>
     </StyledPanel>
   );

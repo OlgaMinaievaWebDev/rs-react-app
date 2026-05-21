@@ -11,8 +11,9 @@ export const StyledResultsColumn = styled.div<{ $isDetailsOpen: boolean }>`
   flex: ${({ $isDetailsOpen }) => ($isDetailsOpen ? '0 0 70%' : 'initial')};
 `;
 
-export const StyledDetailsColumn = styled.div`
+export const StyledDetailsColumn = styled.div<{ $alignWithResults: boolean }>`
   flex: 0 0 30%;
+  margin-top: ${({ $alignWithResults }) => ($alignWithResults ? '52px' : '0')};
 `;
 
 export const StyledPaginationControls = styled.div`

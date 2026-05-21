@@ -20,10 +20,8 @@ export function Results({ items, isLoading, error }: ResultsProps) {
     <StyledResultsSection>
       {items.map((item) => (
         <StyledResultCard to={`details/${item.id}?${params}`} key={item.id}>
-          <h3>Name: {item.name}</h3>
-          <p>
-            Description: {item.species} character with {item.status} status.
-          </p>
+          <h3>{item.name}</h3>
+          <p>{item.species}</p>
         </StyledResultCard>
       ))}
     </StyledResultsSection>

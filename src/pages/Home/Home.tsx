@@ -40,6 +40,7 @@ export function Home() {
   const navigate = useNavigate();
 
   const isDetails = location.pathname.includes('/details');
+  const shouldShowPagination = !isLoading && !error && items.length > 0;
 
   useEffect(() => {
     if (!pageParam) {
@@ -103,7 +104,7 @@ export function Home() {
         />
         <StyledMainLayout $isDetailsOpen={isDetails}>
           <StyledResultsColumn $isDetailsOpen={isDetails}>
-            {!isLoading && !error && items.length && (
+            {shouldShowPagination && (
               <StyledPaginationControls>
                 <StyledPaginationButton
                   onClick={handlePrevClick}
@@ -125,7 +126,7 @@ export function Home() {
             <Results items={items} isLoading={isLoading} error={error} />
           </StyledResultsColumn>
 
-          <StyledDetailsColumn>
+          <StyledDetailsColumn $alignWithResults={shouldShowPagination}>
             <Outlet />
           </StyledDetailsColumn>
         </StyledMainLayout>

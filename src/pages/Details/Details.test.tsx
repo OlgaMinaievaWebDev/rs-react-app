@@ -44,6 +44,9 @@ describe('Details component', () => {
       </MemoryRouter>
     );
     expect(await screen.findByText(/Rick/)).toBeInTheDocument();
+    expect(
+      screen.getByText('Description: Human character with Alive status.')
+    ).toBeInTheDocument();
   });
 
   it('shows an error message when fetch fails', async () => {

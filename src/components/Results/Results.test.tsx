@@ -45,11 +45,9 @@ describe('Results component', () => {
         <Results items={[item]} isLoading={false} error={null} />
       </MemoryRouter>
     );
-    const name = screen.getByText(`Name: ${item.name}`);
-    const description = screen.getByText(
-      `Description: ${item.species} character with ${item.status} status.`
-    );
+    const name = screen.getByText(item.name);
+    const species = screen.getByText(item.species);
     expect(name).toBeInTheDocument();
-    expect(description).toBeInTheDocument();
+    expect(species).toBeInTheDocument();
   });
 });

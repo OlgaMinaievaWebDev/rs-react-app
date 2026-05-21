@@ -16,6 +16,22 @@ export const StyledResultCard = styled(Link)`
   margin-bottom: 12px;
   text-decoration: none;
   color: inherit;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: #9fb5cc;
+    box-shadow: 0 8px 24px rgba(31, 42, 55, 0.12);
+    transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #0f5ea8;
+    outline-offset: 2px;
+  }
 
   h3,
   p {

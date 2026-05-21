@@ -8,6 +8,14 @@ export const StyledPanel = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: #c7d3e0;
+    box-shadow: 0 8px 24px rgba(31, 42, 55, 0.1);
+  }
 `;
 
 export const StyledHeader = styled.h2`
@@ -30,5 +38,10 @@ export const StyledCloseButton = styled.button`
 
   &:hover {
     background: #eef5fb;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #0f5ea8;
+    outline-offset: 2px;
   }
 `;
