@@ -1,11 +1,8 @@
 import { useSearchParams } from 'react-router-dom';
 
+import { Loader } from '../Loader';
 import type { ResultsProps } from './Result.interfaces';
-import {
-  StyledLoader,
-  StyledResultCard,
-  StyledResultsSection,
-} from './Results.styles';
+import { StyledResultCard, StyledResultsSection } from './Results.styles';
 
 export function Results({ items, isLoading, error }: ResultsProps) {
   const [searchParams] = useSearchParams();
@@ -13,7 +10,7 @@ export function Results({ items, isLoading, error }: ResultsProps) {
 
   return isLoading ? (
     <StyledResultsSection>
-      <StyledLoader className="loader" />
+      <Loader />
     </StyledResultsSection>
   ) : error ? (
     <StyledResultsSection>{error}</StyledResultsSection>

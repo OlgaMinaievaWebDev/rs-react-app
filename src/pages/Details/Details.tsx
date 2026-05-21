@@ -3,13 +3,9 @@ import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
 import { fetchCharacterById } from '../../api/characters';
 import type { Character } from '../../api/characters.interfaces';
+import { Loader } from '../../components/Loader';
 
-import {
-  StyledCloseButton,
-  StyledHeader,
-  StyledLoadingIndicator,
-  StyledPanel,
-} from './Details.styles';
+import { StyledCloseButton, StyledHeader, StyledPanel } from './Details.styles';
 
 export function Details() {
   const [isLoading, setIsLoading] = useState(true);
@@ -53,7 +49,7 @@ export function Details() {
     <p>Unable to load character.</p>
   ) : isLoading ? (
     <StyledPanel role="status" aria-label="Loading character details">
-      <StyledLoadingIndicator />
+      <Loader />
       <p>Loading...</p>
     </StyledPanel>
   ) : error ? (

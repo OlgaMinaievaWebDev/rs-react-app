@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 export const StyledResultsSection = styled.section`
   background: #ffffff;
@@ -25,20 +25,4 @@ export const StyledResultCard = styled(Link)`
   h3 {
     margin-bottom: 8px;
   }
-`;
-
-const spin = keyframes`
-  to {
-    transform: rotate(360deg);
-  }
-`;
-
-export const StyledLoader = styled.div`
-  width: 24px;
-  height: 24px;
-  border: 3px solid #ddd;
-  border-top: 3px solid #2e3133;
-  border-radius: 50%;
-  animation: ${spin} 1s linear infinite;
-  margin: 0 auto;
 `;

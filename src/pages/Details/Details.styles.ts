@@ -32,18 +32,3 @@ export const StyledCloseButton = styled.button`
     background: #eef5fb;
   }
 `;
-
-export const StyledLoadingIndicator = styled.div`
-  width: 24px;
-  height: 24px;
-  border: 3px solid #d7dfe8;
-  border-top-color: #1f2a37;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-`;
