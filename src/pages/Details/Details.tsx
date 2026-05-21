@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
 import { fetchCharacterById } from '../../api/characters';
-import type { Character } from '../Home/Home.interfaces';
+import type { Character } from '../../api/characters.interfaces';
 
 import {
   StyledCloseButton,

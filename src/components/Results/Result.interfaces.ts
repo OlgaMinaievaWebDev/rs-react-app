@@ -1,4 +1,4 @@
-import type { Character } from '../../pages/Home';
+import type { Character } from '../../api/characters.interfaces';
 
 export interface ResultsProps {
   items: Character[];

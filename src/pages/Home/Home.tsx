@@ -7,12 +7,12 @@ import {
 } from 'react-router-dom';
 
 import { fetchCharacters } from '../../api/characters';
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import type { Character } from '../../api/characters.interfaces';
+import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { ErrorButton } from '../../components/ErrorButton';
 import { Results } from '../../components/Results';
 import { Search } from '../../components/Search';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import type { Character } from './Home.interfaces';
 import {
   StyledDetailsColumn,
   StyledMainLayout,

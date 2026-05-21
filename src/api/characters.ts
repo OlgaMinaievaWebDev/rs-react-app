@@ -1,7 +1,4 @@
-import type {
-  Character,
-  CharactersResponse,
-} from './../pages/Home'
+import type { Character, CharactersResponse } from './characters.interfaces';
 
 const BASE_URL = 'https://rickandmortyapi.com/api/character';
 
