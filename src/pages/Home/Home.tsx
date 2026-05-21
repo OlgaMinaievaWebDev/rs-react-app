@@ -65,8 +65,7 @@ export function Home() {
         setIsLoading(false);
       }
     };
-
-    void loadCharacters();
+      void loadCharacters();
   }, [activeSearch, currentPage]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,17 +80,11 @@ export function Home() {
   };
 
   const handleNextClick = () => {
-    const nextPage = currentPage + 1;
-    if (currentPage < totalPages) {
-      navigate(`?page=${nextPage}`);
-    }
+    navigate(`?page=${currentPage + 1}`);
   };
 
   const handlePrevClick = () => {
-    const prevPage = currentPage - 1;
-    if (currentPage > 1) {
-      navigate(`?page=${prevPage}`);
-    }
+    navigate(`?page=${currentPage - 1}`);
   };
 
   return (
