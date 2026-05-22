@@ -7,13 +7,12 @@ import { Results } from './Results';
 
 describe('Results component', () => {
   it('should show loading state', () => {
-    const { container } = render(
+    render(
       <MemoryRouter>
         <Results items={[]} isLoading error={null} />
       </MemoryRouter>
     );
-    const loader = container.querySelector('.loader');
-    expect(loader).toBeInTheDocument();
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
   it('should show error message', () => {
     render(

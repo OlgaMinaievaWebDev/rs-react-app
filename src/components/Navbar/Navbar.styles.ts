@@ -1,5 +1,8 @@
-import { NavLink } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+interface StyledLinkProps {
+  $isActive: boolean;
+}
 
 export const StyledNavbar = styled.nav`
   display: flex;
@@ -11,7 +14,8 @@ export const StyledNavbar = styled.nav`
   background: #ffffff;
 `;
 
-export const StyledLink = styled(NavLink)`
+export const StyledLink = styled.span<StyledLinkProps>`
+  display: inline-block;
   text-decoration: none;
   color: #334155;
   font-weight: 600;
@@ -26,8 +30,10 @@ export const StyledLink = styled(NavLink)`
     color: #1f2a37;
   }
 
-  &.active {
-    background: #1f2a37;
-    color: #ffffff;
-  }
+  ${({ $isActive }) =>
+    $isActive &&
+    css`
+      background: #1f2a37;
+      color: #ffffff;
+    `}
 `;

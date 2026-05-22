@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
 import { fetchCharacterById } from '../../api/characters';
 import type { Character } from '../../api/characters.interfaces';
-import { Loader } from '../../components/Loader';
 
+import { DetailsLoading } from './components';
 import { StyledCloseButton, StyledHeader, StyledPanel } from './Details.styles';
 
 export function Details() {
@@ -26,37 +26,46 @@ export function Details() {
     }
   };
 
+  const loadCharacter = useCallback(async (characterId: string) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const data = await fetchCharacterById(characterId);
+      setCharacter(data);
+    } catch {
+      setError('Unable to load character.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (!id) return;
 
-    const loadCharacter = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const data = await fetchCharacterById(id);
-        setCharacter(data);
-      } catch {
-        setError('Unable to load character.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    const timeoutId = window.setTimeout(() => {
+      void loadCharacter(id);
+    }, 0);
 
-    void loadCharacter();
-  }, [id]);
+    return () => window.clearTimeout(timeoutId);
+  }, [id, loadCharacter]);
 
-  return !id ? (
-    <p>Unable to load character.</p>
-  ) : isLoading ? (
-    <StyledPanel role="status" aria-label="Loading character details">
-      <Loader />
-      <p>Loading...</p>
-    </StyledPanel>
-  ) : error ? (
-    <p>{error}</p>
-  ) : !character ? (
-    <p>No character</p>
-  ) : (
+  if (!id) {
+    return <p>Unable to load character.</p>;
+  }
+
+  if (isLoading) {
+    return <DetailsLoading />;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!character) {
+    return <p>No character</p>;
+  }
+
+  return (
     <StyledPanel>
       <StyledHeader>{character.name}</StyledHeader>
       <p>Species: {character.species}</p>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Outlet,
   useLocation,
@@ -48,25 +48,30 @@ export function Home() {
     }
   }, [pageParam, setSearchParams]);
 
-  useEffect(() => {
-    const loadCharacters = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const data = await fetchCharacters(activeSearch, currentPage);
-        setItems(data.results);
-        setTotalPages(data.info.pages);
-      } catch {
-        setError(
-          'Unable to load characters right now. Check your connection and try again.'
-        );
-        setItems([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-      void loadCharacters();
+  const loadCharacters = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const data = await fetchCharacters(activeSearch, currentPage);
+      setItems(data.results);
+      setTotalPages(data.info.pages);
+    } catch {
+      setError(
+        'Unable to load characters right now. Check your connection and try again.'
+      );
+      setItems([]);
+    } finally {
+      setIsLoading(false);
+    }
   }, [activeSearch, currentPage]);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      void loadCharacters();
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [loadCharacters]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);

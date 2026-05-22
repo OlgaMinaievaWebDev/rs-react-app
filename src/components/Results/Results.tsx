@@ -8,15 +8,24 @@ export function Results({ items, isLoading, error }: ResultsProps) {
   const [searchParams] = useSearchParams();
   const params = searchParams.toString();
 
-  return isLoading ? (
-    <StyledResultsSection>
-      <Loader />
-    </StyledResultsSection>
-  ) : error ? (
-    <StyledResultsSection>{error}</StyledResultsSection>
-  ) : !items.length ? (
-    <StyledResultsSection>No results</StyledResultsSection>
-  ) : (
+  if (isLoading) {
+    return (
+      <StyledResultsSection>
+        <Loader />
+        <p>Loading...</p>
+      </StyledResultsSection>
+    );
+  }
+
+  if (error) {
+    return <StyledResultsSection>{error}</StyledResultsSection>;
+  }
+
+  if (!items.length) {
+    return <StyledResultsSection>No results</StyledResultsSection>;
+  }
+
+  return (
     <StyledResultsSection>
       {items.map((item) => (
         <StyledResultCard to={`details/${item.id}?${params}`} key={item.id}>
