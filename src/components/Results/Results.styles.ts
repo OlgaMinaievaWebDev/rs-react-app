@@ -9,7 +9,10 @@ export const StyledResultsSection = styled.section`
 `;
 
 export const StyledResultCard = styled(Link)`
-  display: block;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 16px;
+  align-items: center;
   padding: 16px;
   border: 1px solid #e2e2e2;
   border-radius: 10px;
@@ -39,6 +42,20 @@ export const StyledResultCard = styled(Link)`
   }
 
   h3 {
-    margin-bottom: 8px;
+    grid-column: 1;
   }
+
+  p {
+    grid-column: 1;
+  }
+`;
+
+export const StyledCheckbox = styled.input`
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: #0f5ea8;
 `;
