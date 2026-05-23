@@ -21,7 +21,7 @@ import {
   StyledPaginationLabel,
   StyledResultsColumn,
 } from './Home.styles';
-
+import { SelectedItemsFlyout } from '../../components/SelectedItemsFlyout';
 export function Home() {
   const [search, setSearch] = useLocalStorage('input');
   const [activeSearch, setActiveSearch] = useState(search);
@@ -122,6 +122,7 @@ export function Home() {
               </StyledPaginationControls>
             )}
             <Results items={items} isLoading={isLoading} error={error} />
+            <SelectedItemsFlyout />
           </StyledResultsColumn>
 
           <StyledDetailsColumn $alignWithResults={shouldShowPagination}>
