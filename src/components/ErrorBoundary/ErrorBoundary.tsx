@@ -1,14 +1,11 @@
 import React from 'react';
-import './ErrorBoundary.css';
+import type {
+  ErrorBoundaryProps,
+  ErrorBoundaryState,
+} from './ErrorBoundary.interfaces';
+import { StyledErrorBoundaryTitle } from './ErrorBoundary.styles';
 
-interface ErrorBoundaryState {
-  hasError: boolean;
-}
-
-interface ErrorBoundaryProps {
-  children: React.ReactNode;
-}
-export default class ErrorBoundary extends React.Component<
+export class ErrorBoundary extends React.Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
@@ -25,7 +22,11 @@ export default class ErrorBoundary extends React.Component<
   }
   render() {
     if (this.state.hasError) {
-      return <h1 className="error-boundary">Something went wrong</h1>;
+      return (
+        <StyledErrorBoundaryTitle>
+          Something went wrong
+        </StyledErrorBoundaryTitle>
+      );
     }
     return this.props.children;
   }

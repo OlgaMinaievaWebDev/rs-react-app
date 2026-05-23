@@ -1,7 +1,9 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import App from './App';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import App from './App';
 
 describe('App component', () => {
   beforeEach(() => {
@@ -22,7 +24,11 @@ describe('App component', () => {
   it('loads with empty localStorage and fetches initial characters', async () => {
     localStorage.clear();
     vi.useFakeTimers();
-    render(<App />);
+    render(
+      <MemoryRouter>
+        <App />
+      </MemoryRouter>
+    );
     await act(async () => {
       await vi.advanceTimersByTimeAsync(300);
     });
@@ -34,7 +40,11 @@ describe('App component', () => {
   it('loads saved search term from localStorage', async () => {
     localStorage.setItem('input', 'rick');
     vi.useFakeTimers();
-    render(<App />);
+    render(
+      <MemoryRouter>
+        <App />
+      </MemoryRouter>
+    );
     await act(async () => {
       await vi.advanceTimersByTimeAsync(300);
     });
@@ -45,25 +55,28 @@ describe('App component', () => {
     );
   });
 
-it('saves trimmed search term to localStorage when search button is clicked', async () => {
-  const event = userEvent.setup();
+  it('saves trimmed search term to localStorage when search button is clicked', async () => {
+    const event = userEvent.setup();
 
-  render(<App />);
+    render(
+      <MemoryRouter>
+        <App />
+      </MemoryRouter>
+    );
 
-  const input = screen.getByRole('textbox');
-  await event.type(input, ' rick ');
+    const input = screen.getByRole('textbox');
+    await event.type(input, ' rick ');
 
-  const searchButton = screen.getByRole('button', { name: /search/i });
-  await event.click(searchButton);
+    const searchButton = screen.getByRole('button', { name: /search/i });
+    await event.click(searchButton);
 
-  await act(async () => {
-    await new Promise((resolve) => setTimeout(resolve, 350));
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 350));
+    });
+
+    expect(localStorage.getItem('input')).toBe('rick');
+    expect(fetch).toHaveBeenLastCalledWith(
+      'https://rickandmortyapi.com/api/character/?page=1&name=rick'
+    );
   });
-
-  expect(localStorage.getItem('input')).toBe('rick');
-  expect(fetch).toHaveBeenLastCalledWith(
-    'https://rickandmortyapi.com/api/character/?page=1&name=rick'
-  );
-});
-
 });

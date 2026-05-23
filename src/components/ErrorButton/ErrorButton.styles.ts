@@ -1,4 +1,6 @@
-.error-button {
+import styled from 'styled-components';
+
+export const StyledErrorButton = styled.button`
   align-self: flex-end;
   padding: 10px 16px;
   border: 1px solid #d9534f;
@@ -6,8 +8,8 @@
   background: #fff;
   color: #d9534f;
   cursor: pointer;
-}
 
-.error-button:hover {
-  background: #fff3f3;
-}
+  &:hover {
+    background: #fff3f3;
+  }
+`;
