@@ -1,0 +1,1 @@
+export { DetailsLoading } from './DetailsLoading';
