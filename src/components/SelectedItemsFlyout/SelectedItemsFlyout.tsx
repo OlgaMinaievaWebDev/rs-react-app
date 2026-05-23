@@ -18,7 +18,7 @@ export function SelectedItemsFlyout() {
   );
 
   const handleDownload = () => {
-    const headers = ['id', 'name', 'status', 'species'];
+    const headers = ['id', 'name', 'status', 'species', 'detailsUrl'];
     const headerRow = headers.join(',');
     const escapeCsvValue = (value: string | number) =>
       `"${String(value).replace(/"/g, '""')}"`;
@@ -28,6 +28,7 @@ export function SelectedItemsFlyout() {
         escapeCsvValue(character.name),
         escapeCsvValue(character.status),
         escapeCsvValue(character.species),
+        escapeCsvValue(`${window.location.origin}/details/${character.id}`),
       ].join(',')
     );
     const csvContent = [headerRow, ...rows].join('\n');
@@ -36,7 +37,7 @@ export function SelectedItemsFlyout() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'selected-characters.csv';
+    link.download = `${selectedCount}_items.csv`;
     link.click();
     URL.revokeObjectURL(url);
   };

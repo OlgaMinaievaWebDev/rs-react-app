@@ -13,6 +13,11 @@ export const GlobalStyles = createGlobalStyle`
     --primary-text: #ffffff;
     --focus: #0f5ea8;
     --shadow: rgba(31, 42, 55, 0.12);
+    --link: #0f5ea8;
+    --error: #d9534f;
+    --error-surface: #fff3f3;
+    --error-border: #f0b4b4;
+    --error-text: #9f1d1d;
   }
 
   :root[data-theme='dark'] {
@@ -26,6 +31,11 @@ export const GlobalStyles = createGlobalStyle`
     --primary-text: #111827;
     --focus: #60a5fa;
     --shadow: rgba(0, 0, 0, 0.32);
+    --link: #60a5fa;
+    --error: #f87171;
+    --error-surface: #3f1d1d;
+    --error-border: #7f2d2d;
+    --error-text: #fecaca;
   }
 
 
