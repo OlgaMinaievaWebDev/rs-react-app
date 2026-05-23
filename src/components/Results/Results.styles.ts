@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const StyledResultsSection = styled.section`
-  background: #ffffff;
-  border: 1px solid #ddd;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 20px;
 `;
@@ -14,7 +14,7 @@ export const StyledResultCard = styled(Link)`
   gap: 8px 16px;
   align-items: center;
   padding: 16px;
-  border: 1px solid #e2e2e2;
+  border: 1px solid var(--border);
   border-radius: 10px;
   margin-bottom: 12px;
   text-decoration: none;
@@ -26,13 +26,13 @@ export const StyledResultCard = styled(Link)`
 
   &:hover,
   &:focus-visible {
-    border-color: #9fb5cc;
-    box-shadow: 0 8px 24px rgba(31, 42, 55, 0.12);
+    border-color: var(--focus);
+    box-shadow: 0 8px 24px var(--shadow);
     transform: translateY(-2px);
   }
 
   &:focus-visible {
-    outline: 2px solid #0f5ea8;
+    outline: 2px solid var(--focus);
     outline-offset: 2px;
   }
 
@@ -57,5 +57,5 @@ export const StyledCheckbox = styled.input`
   height: 20px;
   margin: 0;
   cursor: pointer;
-  accent-color: #0f5ea8;
+  accent-color: var(--focus);
 `;

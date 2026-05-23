@@ -29,11 +29,17 @@ export const StyledPaginationLabel = styled.p`
 `;
 
 export const StyledPaginationButton = styled.button`
-  border: 1px solid #c7d3e0;
+  border: 1px solid var(--border);
   border-radius: 999px;
   padding: 8px 14px;
-  background: #ffffff;
+  background: var(--surface);
+  color: var(--muted-text);
   cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--hover-surface);
+    color: var(--text);
+  }
 
   &:disabled {
     opacity: 0.5;
