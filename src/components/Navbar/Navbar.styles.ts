@@ -9,15 +9,15 @@ export const StyledNavbar = styled.nav`
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  border: 1px solid #d7dfe8;
+  border: 1px solid var(--border);
   border-radius: 14px;
-  background: #ffffff;
+  background: var(--surface);
 `;
 
 export const StyledLink = styled.span<StyledLinkProps>`
   display: inline-block;
   text-decoration: none;
-  color: #334155;
+  color: var(--muted-text);
   font-weight: 600;
   padding: 8px 14px;
   border-radius: 999px;
@@ -26,14 +26,39 @@ export const StyledLink = styled.span<StyledLinkProps>`
     color 0.2s ease;
 
   &:hover {
-    background: #eef5fb;
-    color: #1f2a37;
+    background: var(--hover-surface);
+    color: var(--text);
   }
 
   ${({ $isActive }) =>
     $isActive &&
     css`
-      background: #1f2a37;
-      color: #ffffff;
+      background: var(--primary);
+      color: var(--primary-text);
     `}
+`;
+
+export const StyledThemeButton = styled.button`
+  margin-left: auto;
+  background: var(--surface);
+  color: var(--muted-text);
+  font-weight: 600;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover {
+    background: var(--hover-surface);
+    color: var(--text);
+    border-color: var(--muted-text);
+  }
+
+  &:active {
+    background: var(--border);
+  }
 `;

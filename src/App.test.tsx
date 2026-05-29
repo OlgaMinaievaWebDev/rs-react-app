@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import App from './App';
+import { ThemeProvider } from './context/ThemeContext';
 
 describe('App component', () => {
   beforeEach(() => {
@@ -25,9 +26,11 @@ describe('App component', () => {
     localStorage.clear();
     vi.useFakeTimers();
     render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
+      <ThemeProvider>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </ThemeProvider>
     );
     await act(async () => {
       await vi.advanceTimersByTimeAsync(300);
@@ -41,9 +44,11 @@ describe('App component', () => {
     localStorage.setItem('input', 'rick');
     vi.useFakeTimers();
     render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
+      <ThemeProvider>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </ThemeProvider>
     );
     await act(async () => {
       await vi.advanceTimersByTimeAsync(300);
@@ -59,9 +64,11 @@ describe('App component', () => {
     const event = userEvent.setup();
 
     render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
+      <ThemeProvider>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </ThemeProvider>
     );
 
     const input = screen.getByRole('textbox');

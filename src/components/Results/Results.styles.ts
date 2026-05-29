@@ -2,16 +2,19 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const StyledResultsSection = styled.section`
-  background: #ffffff;
-  border: 1px solid #ddd;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 20px;
 `;
 
 export const StyledResultCard = styled(Link)`
-  display: block;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 16px;
+  align-items: center;
   padding: 16px;
-  border: 1px solid #e2e2e2;
+  border: 1px solid var(--border);
   border-radius: 10px;
   margin-bottom: 12px;
   text-decoration: none;
@@ -23,13 +26,13 @@ export const StyledResultCard = styled(Link)`
 
   &:hover,
   &:focus-visible {
-    border-color: #9fb5cc;
-    box-shadow: 0 8px 24px rgba(31, 42, 55, 0.12);
+    border-color: var(--focus);
+    box-shadow: 0 8px 24px var(--shadow);
     transform: translateY(-2px);
   }
 
   &:focus-visible {
-    outline: 2px solid #0f5ea8;
+    outline: 2px solid var(--focus);
     outline-offset: 2px;
   }
 
@@ -39,6 +42,20 @@ export const StyledResultCard = styled(Link)`
   }
 
   h3 {
-    margin-bottom: 8px;
+    grid-column: 1;
   }
+
+  p {
+    grid-column: 1;
+  }
+`;
+
+export const StyledCheckbox = styled.input`
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--focus);
 `;

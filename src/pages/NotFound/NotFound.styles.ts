@@ -7,25 +7,26 @@ export const StyledNotFoundSection = styled.section`
   gap: 16px;
   align-items: flex-start;
   padding: 24px;
-  border: 1px solid #d7dfe8;
+  border: 1px solid var(--border);
   border-radius: 18px;
-  background: #f8fbff;
+  background: var(--surface);
+  color: var(--text);
 `;
 
 export const StyledNotFoundHeader = styled.h2`
   margin: 0;
   font-size: 2rem;
-  color: #1f2a37;
+  color: var(--text);
 `;
 
 export const StyledNotFoundParagraph = styled.p`
   margin: 0;
-  color: #475569;
+  color: var(--muted-text);
 `;
 
 export const StyledNotFoundLink = styled(Link)`
   text-decoration: none;
-  color: #0f5ea8;
+  color: var(--link);
   font-weight: 600;
 
   &:hover {
