@@ -1,12 +1,20 @@
 import { useEffect, useState } from 'react';
+import { ThemeProvider as StyledThemeProvider } from 'styled-components';
+
+import { appThemes } from '../../styles/theme';
 import { ThemeContext } from './ThemeContext';
-import type { Theme, ThemeProviderProps } from './ThemeContext.interfaces';
+import {
+  ThemeType,
+  type ThemeProviderProps,
+} from './ThemeContext.interfaces';
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<ThemeType>(ThemeType.LIGHT);
 
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+    setTheme((prevTheme) =>
+      prevTheme === ThemeType.LIGHT ? ThemeType.DARK : ThemeType.LIGHT
+    );
   };
 
   useEffect(() => {
@@ -15,7 +23,9 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
+      <StyledThemeProvider theme={appThemes[theme]}>
+        {children}
+      </StyledThemeProvider>
     </ThemeContext.Provider>
   );
 };

@@ -1,4 +1,5 @@
 import { useSelectedCharactersStore } from '../../store/store';
+import { createCharactersCsv, downloadFile } from '../../utils/csv';
 import {
   StyledFlyoutActions,
   StyledFlyoutButton,
@@ -18,28 +19,12 @@ export function SelectedItemsFlyout() {
   );
 
   const handleDownload = () => {
-    const headers = ['id', 'name', 'status', 'species', 'detailsUrl'];
-    const headerRow = headers.join(',');
-    const escapeCsvValue = (value: string | number) =>
-      `"${String(value).replace(/"/g, '""')}"`;
-    const rows = selectedCharacters.map((character) =>
-      [
-        escapeCsvValue(character.id),
-        escapeCsvValue(character.name),
-        escapeCsvValue(character.status),
-        escapeCsvValue(character.species),
-        escapeCsvValue(`${window.location.origin}/details/${character.id}`),
-      ].join(',')
+    const csvContent = createCharactersCsv(
+      selectedCharacters,
+      window.location.origin
     );
-    const csvContent = [headerRow, ...rows].join('\n');
 
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${selectedCount}_items.csv`;
-    link.click();
-    URL.revokeObjectURL(url);
+    downloadFile(csvContent, `${selectedCount}_items.csv`);
   };
 
   if (selectedCount === 0) {

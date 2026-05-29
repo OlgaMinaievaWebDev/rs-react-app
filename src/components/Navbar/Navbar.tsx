@@ -1,4 +1,5 @@
 import { useTheme } from '../../context/ThemeContext';
+import { ThemeType } from '../../context/ThemeContext/ThemeContext.interfaces';
 import { NavItem } from './NavItem';
 import { StyledNavbar, StyledThemeButton } from './Navbar.styles';
 
@@ -10,7 +11,7 @@ export function Navbar() {
       <NavItem to="/">Home</NavItem>
       <NavItem to="/about">About</NavItem>
       <StyledThemeButton type="button" onClick={toggleTheme}>
-        {theme === 'light' ? 'Dark Theme' : 'Light Theme'}
+        {theme === ThemeType.LIGHT ? 'Dark' : 'Light'}
       </StyledThemeButton>
     </StyledNavbar>
   );
