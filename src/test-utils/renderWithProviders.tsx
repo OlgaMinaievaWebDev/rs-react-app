@@ -7,21 +7,26 @@ import { ThemeProvider } from '../context/ThemeContext';
 
 interface RenderWithProvidersOptions {
   initialEntries?: string[];
+  queryClient?: QueryClient;
 }
+
+export const createTestQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+        staleTime: Infinity,
+        gcTime: Infinity,
+      },
+    },
+  });
 
 export const renderWithProviders = (
   ui: ReactElement,
   options: RenderWithProvidersOptions = {}
 ) => {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-      },
-    },
-  });
-
-  const { initialEntries = ['/'] } = options;
+  const { initialEntries = ['/'], queryClient = createTestQueryClient() } =
+    options;
 
   return render(
     <QueryClientProvider client={queryClient}>

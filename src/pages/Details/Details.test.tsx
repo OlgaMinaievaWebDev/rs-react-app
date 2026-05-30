@@ -4,7 +4,10 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Details } from './Details';
-import { renderWithProviders } from '../../test-utils/renderWithProviders';
+import {
+  createTestQueryClient,
+  renderWithProviders,
+} from '../../test-utils/renderWithProviders';
 
 function LocationDisplay() {
   const location = useLocation();
@@ -12,13 +15,16 @@ function LocationDisplay() {
   return <p>{location.search}</p>;
 }
 
-const renderDetails = (initialEntry = '/details/1?page=3') => {
+const renderDetails = (
+  initialEntry = '/details/1?page=3',
+  queryClient = createTestQueryClient()
+) => {
   return renderWithProviders(
     <Routes>
       <Route path="/details/:id" element={<Details />} />
       <Route path="/" element={<LocationDisplay />} />
     </Routes>,
-    { initialEntries: [initialEntry] }
+    { initialEntries: [initialEntry], queryClient }
   );
 };
 
@@ -104,5 +110,30 @@ describe('Details component', () => {
     expect(
       screen.getByText('Description: Human character with Alive status.')
     ).toBeInTheDocument();
+  });
+
+  it('reuses cached character data when opened again', async () => {
+    const queryClient = createTestQueryClient();
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        id: 1,
+        name: 'Rick',
+        species: 'Human',
+        status: 'Alive',
+      }),
+    } as Response);
+    const callsBeforeFirstRender = fetchMock.mock.calls.length;
+
+    const firstRender = renderDetails('/details/1?page=3', queryClient);
+    expect(await screen.findByText(/Rick/)).toBeInTheDocument();
+    const callsAfterFirstRender = fetchMock.mock.calls.length;
+    expect(callsAfterFirstRender).toBeGreaterThan(callsBeforeFirstRender);
+
+    firstRender.unmount();
+    renderDetails('/details/1?page=3', queryClient);
+
+    expect(await screen.findByText(/Rick/)).toBeInTheDocument();
+    expect(fetchMock.mock.calls.length).toBe(callsAfterFirstRender);
   });
 });
