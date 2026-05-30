@@ -1,10 +1,9 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import App from './App';
-import { ThemeProvider } from './context/ThemeContext';
+import { renderWithProviders } from './test-utils/renderWithProviders';
 
 describe('App component', () => {
   beforeEach(() => {
@@ -14,6 +13,7 @@ describe('App component', () => {
       ok: true,
       json: async () => ({
         results: [],
+        info: { pages: 1 },
       }),
     });
   });
@@ -25,13 +25,7 @@ describe('App component', () => {
   it('loads with empty localStorage and fetches initial characters', async () => {
     localStorage.clear();
     vi.useFakeTimers();
-    render(
-      <ThemeProvider>
-        <MemoryRouter>
-          <App />
-        </MemoryRouter>
-      </ThemeProvider>
-    );
+    renderWithProviders(<App />);
     await act(async () => {
       await vi.advanceTimersByTimeAsync(300);
     });
@@ -43,13 +37,7 @@ describe('App component', () => {
   it('loads saved search term from localStorage', async () => {
     localStorage.setItem('input', 'rick');
     vi.useFakeTimers();
-    render(
-      <ThemeProvider>
-        <MemoryRouter>
-          <App />
-        </MemoryRouter>
-      </ThemeProvider>
-    );
+    renderWithProviders(<App />);
     await act(async () => {
       await vi.advanceTimersByTimeAsync(300);
     });
@@ -63,13 +51,7 @@ describe('App component', () => {
   it('saves trimmed search term to localStorage when search button is clicked', async () => {
     const event = userEvent.setup();
 
-    render(
-      <ThemeProvider>
-        <MemoryRouter>
-          <App />
-        </MemoryRouter>
-      </ThemeProvider>
-    );
+    renderWithProviders(<App />);
 
     const input = screen.getByRole('textbox');
     await event.type(input, ' rick ');

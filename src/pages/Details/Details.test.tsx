@@ -1,9 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Details } from './Details';
+import { renderWithProviders } from '../../test-utils/renderWithProviders';
 
 function LocationDisplay() {
   const location = useLocation();
@@ -11,15 +12,22 @@ function LocationDisplay() {
   return <p>{location.search}</p>;
 }
 
+const renderDetails = (initialEntry = '/details/1?page=3') => {
+  return renderWithProviders(
+    <Routes>
+      <Route path="/details/:id" element={<Details />} />
+      <Route path="/" element={<LocationDisplay />} />
+    </Routes>,
+    { initialEntries: [initialEntry] }
+  );
+};
+
 describe('Details component', () => {
   it('shows loading state before character data is loaded', () => {
-    render(
-      <MemoryRouter initialEntries={['/details/1?page=3']}>
-        <Routes>
-          <Route path="/details/:id" element={<Details />} />
-        </Routes>
-      </MemoryRouter>
+    vi.spyOn(globalThis, 'fetch').mockReturnValue(
+      new Promise(() => {}) as Promise<Response>
     );
+    renderDetails();
     expect(screen.getByText('Loading...')).toBeInTheDocument();
     expect(
       screen.getByRole('status', { name: /loading character details/i })
@@ -36,13 +44,7 @@ describe('Details component', () => {
         status: 'Alive',
       }),
     } as Response);
-    render(
-      <MemoryRouter initialEntries={['/details/1?page=3']}>
-        <Routes>
-          <Route path="/details/:id" element={<Details />} />
-        </Routes>
-      </MemoryRouter>
-    );
+    renderDetails();
     expect(await screen.findByText(/Rick/)).toBeInTheDocument();
     expect(
       screen.getByText('Description: Human character with Alive status.')
@@ -53,13 +55,7 @@ describe('Details component', () => {
     vi.spyOn(globalThis, 'fetch').mockResolvedValue({
       ok: false,
     } as Response);
-    render(
-      <MemoryRouter initialEntries={['/details/1?page=3']}>
-        <Routes>
-          <Route path="/details/:id" element={<Details />} />
-        </Routes>
-      </MemoryRouter>
-    );
+    renderDetails();
     expect(
       await screen.findByText(/Unable to load character/)
     ).toBeInTheDocument();
@@ -76,14 +72,7 @@ describe('Details component', () => {
       }),
     } as Response);
     const event = userEvent.setup();
-    render(
-      <MemoryRouter initialEntries={['/details/1?page=3']}>
-        <Routes>
-          <Route path="/details/:id" element={<Details />} />
-          <Route path="/" element={<LocationDisplay />} />
-        </Routes>
-      </MemoryRouter>
-    );
+    renderDetails();
 
     expect(await screen.findByText(/Rick/)).toBeInTheDocument();
     const closeBtn = screen.getByRole('button', { name: /close/i });

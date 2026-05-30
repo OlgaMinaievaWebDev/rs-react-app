@@ -1,21 +1,18 @@
-import { useCallback, useEffect, useState } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
-import { fetchCharacterById } from '../../api/characters';
-import type { Character } from '../../api/characters.interfaces';
-
 import { DetailsLoading } from './components';
+
+import { useCharacterQuery } from '../../hooks/useCharacterQuery';
+
 import { StyledCloseButton, StyledHeader, StyledPanel } from './Details.styles';
 
 export function Details() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [character, setCharacter] = useState<Character | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const { id } = useParams();
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
+  const { data: character, isLoading, error } = useCharacterQuery(id);
   const queryString = searchParams.toString();
 
   const handleClose = () => {
@@ -26,29 +23,6 @@ export function Details() {
     }
   };
 
-  const loadCharacter = useCallback(async (characterId: string) => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const data = await fetchCharacterById(characterId);
-      setCharacter(data);
-    } catch {
-      setError('Unable to load character.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!id) return;
-
-    const timeoutId = window.setTimeout(() => {
-      void loadCharacter(id);
-    }, 0);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [id, loadCharacter]);
-
   if (!id) {
     return <p>Unable to load character.</p>;
   }
@@ -58,7 +32,7 @@ export function Details() {
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <p>Unable to load character.</p>;
   }
 
   if (!character) {
