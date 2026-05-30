@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   Outlet,
   useLocation,
@@ -42,12 +43,14 @@ export function Home() {
   const errorMessage = error
     ? 'Unable to load characters right now. Check your connection and try again.'
     : null;
+  const queryClient = useQueryClient();
 
   const location = useLocation();
   const navigate = useNavigate();
 
   const isDetails = location.pathname.includes('/details');
   const shouldShowPagination = !isLoading && !errorMessage && items.length > 0;
+  const shouldShowRefresh = !isLoading;
 
   useEffect(() => {
     if (!pageParam) {
@@ -74,6 +77,12 @@ export function Home() {
     navigate(`?page=${currentPage - 1}`);
   };
 
+  const handleRefreshClick = () => {
+    void queryClient.invalidateQueries({
+      queryKey: ['characters', activeSearch, currentPage],
+    });
+  };
+
   return (
     <>
       <ErrorBoundary>
@@ -84,25 +93,38 @@ export function Home() {
         />
         <StyledMainLayout $isDetailsOpen={isDetails}>
           <StyledResultsColumn $isDetailsOpen={isDetails}>
-            {shouldShowPagination && (
+            {(shouldShowPagination || shouldShowRefresh) && (
               <StyledPaginationControls>
-                <StyledPaginationButton
-                  onClick={handlePrevClick}
-                  disabled={currentPage === 1}
-                >
-                  Prev
-                </StyledPaginationButton>
-                <StyledPaginationLabel>
-                  Page {currentPage} of {totalPages}
-                </StyledPaginationLabel>
-                <StyledPaginationButton
-                  onClick={handleNextClick}
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </StyledPaginationButton>
+                {shouldShowPagination && (
+                  <>
+                    <StyledPaginationButton
+                      onClick={handlePrevClick}
+                      disabled={currentPage === 1}
+                    >
+                      Prev
+                    </StyledPaginationButton>
+                    <StyledPaginationLabel>
+                      Page {currentPage} of {totalPages}
+                    </StyledPaginationLabel>
+                    <StyledPaginationButton
+                      onClick={handleNextClick}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </StyledPaginationButton>
+                  </>
+                )}
+                {shouldShowRefresh && (
+                  <StyledPaginationButton
+                    type="button"
+                    onClick={handleRefreshClick}
+                  >
+                    Refresh
+                  </StyledPaginationButton>
+                )}
               </StyledPaginationControls>
             )}
+
             <Results items={items} isLoading={isLoading} error={errorMessage} />
             <SelectedItemsFlyout />
           </StyledResultsColumn>

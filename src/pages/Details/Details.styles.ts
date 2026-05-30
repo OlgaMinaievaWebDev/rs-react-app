@@ -28,9 +28,13 @@ export const StyledHeader = styled.h2`
   border-bottom: 1px solid var(--border);
 `;
 
-export const StyledCloseButton = styled.button`
-  align-self: flex-start;
+export const StyledDetailsActions = styled.div`
+  display: flex;
+  gap: 8px;
   margin-top: 8px;
+`;
+
+export const StyledDetailsButton = styled.button`
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 8px 14px;

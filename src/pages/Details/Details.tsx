@@ -1,10 +1,16 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
 import { DetailsLoading } from './components';
 
 import { useCharacterQuery } from '../../hooks/useCharacterQuery';
 
-import { StyledCloseButton, StyledHeader, StyledPanel } from './Details.styles';
+import {
+  StyledDetailsActions,
+  StyledDetailsButton,
+  StyledHeader,
+  StyledPanel,
+} from './Details.styles';
 
 export function Details() {
   const { id } = useParams();
@@ -14,6 +20,7 @@ export function Details() {
 
   const { data: character, isLoading, error } = useCharacterQuery(id);
   const queryString = searchParams.toString();
+  const queryClient = useQueryClient();
 
   const handleClose = () => {
     if (queryString) {
@@ -21,6 +28,12 @@ export function Details() {
     } else {
       navigate('/');
     }
+  };
+
+  const handleRefreshClick = () => {
+    void queryClient.invalidateQueries({
+      queryKey: ['character', id],
+    });
   };
 
   if (!id) {
@@ -48,7 +61,14 @@ export function Details() {
         Description: {character.species} character with {character.status}{' '}
         status.
       </p>
-      <StyledCloseButton onClick={handleClose}>Close</StyledCloseButton>
+      <StyledDetailsActions>
+        <StyledDetailsButton type="button" onClick={handleRefreshClick}>
+          Refresh
+        </StyledDetailsButton>
+        <StyledDetailsButton type="button" onClick={handleClose}>
+          Close
+        </StyledDetailsButton>
+      </StyledDetailsActions>
     </StyledPanel>
   );
 }
