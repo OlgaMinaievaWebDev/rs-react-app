@@ -5,15 +5,15 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { BrowserRouter } from 'react-router-dom';
 
 import App from './App.tsx';
+import { config } from './config';
 import { GlobalStyles } from './styles/GlobalStyles.ts';
 import { ThemeProvider } from './context/ThemeContext';
 
-const queryCacheTtl = Number(import.meta.env.VITE_QUERY_CACHE_TTL) || 300000;
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: queryCacheTtl,
-      gcTime: queryCacheTtl,
+      staleTime: config.queryCacheTtlMs,
+      gcTime: config.queryCacheTtlMs,
     },
   },
 });

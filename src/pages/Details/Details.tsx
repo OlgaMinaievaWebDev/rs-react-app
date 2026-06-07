@@ -36,16 +36,12 @@ export function Details() {
     });
   };
 
-  if (!id) {
+  if (!id || error) {
     return <p>Unable to load character.</p>;
   }
 
   if (isLoading) {
     return <DetailsLoading />;
-  }
-
-  if (error) {
-    return <p>Unable to load character.</p>;
   }
 
   if (!character) {

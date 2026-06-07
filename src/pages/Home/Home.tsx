@@ -28,7 +28,6 @@ import {
 export function Home() {
   const [search, setSearch] = useLocalStorage('input');
   const [activeSearch, setActiveSearch] = useState(search);
-
   const [searchParams, setSearchParams] = useSearchParams();
   const pageParam = searchParams.get('page');
   const parsedPage = Number(pageParam);
@@ -38,17 +37,16 @@ export function Home() {
     activeSearch,
     currentPage
   );
+  const queryClient = useQueryClient();
+  const location = useLocation();
+  const navigate = useNavigate();
   const items = data?.results ?? [];
   const totalPages = data?.info?.pages ?? 1;
   const errorMessage = error
     ? 'Unable to load characters right now. Check your connection and try again.'
     : null;
-  const queryClient = useQueryClient();
-
-  const location = useLocation();
-  const navigate = useNavigate();
-
   const isDetails = location.pathname.includes('/details');
+
   const shouldShowPagination = !isLoading && !errorMessage && items.length > 0;
   const shouldShowRefresh = !isLoading;
 

@@ -5,7 +5,8 @@ import { StyledLink } from './Navbar.styles';
 
 export function NavItem({ children, to }: NavItemProps) {
   const location = useLocation();
-  const isNestedHomeRoute = to === '/' && location.pathname.startsWith('/details');
+  const isNestedHomeRoute =
+    to === '/' && location.pathname.startsWith('/details');
 
   return (
     <NavLink to={to} style={{ textDecoration: 'none' }}>
