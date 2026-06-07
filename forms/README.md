@@ -1,73 +1,87 @@
-# React + TypeScript + Vite
+# Forms
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React Forms assignment for RS School.
 
-Currently, two official plugins are available:
+Task: https://github.com/rolling-scopes-school/tasks/blob/master/react/modules/tasks/forms.md
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Live: https://lively-donut-f268f5.netlify.app/
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- TypeScript
+- Vite
+- React Hook Form
+- Zod
+- Zustand
+- Styled Components
+- Vitest
+- React Testing Library
+- ESLint
+- Prettier
+- Husky
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Reusable modal rendered with React Portal
+- Modal close by button, backdrop click, and Escape key
+- Focus management and keyboard focus trap in modal
+- Uncontrolled form implementation
+- React Hook Form implementation
+- Basic fields: name, age, email, gender, terms
+- Advanced fields: password confirmation, password strength, country autocomplete, image upload
+- Zod validation schema
+- Email validation without regular expressions
+- Form submissions stored with Zustand
+- Submitted data displayed on the main page
+- Temporary highlight for the newest submission
+- Tests for forms, modal, store, and utility functions
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Install dependencies:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Run the development server:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```bash
+npm run dev
 ```
+
+Build for production:
+
+```bash
+npm run build
+```
+
+Preview production build:
+
+```bash
+npm run preview
+```
+
+## Scripts
+
+```bash
+npm run lint
+npm run format:fix
+npm run test
+npm run test:coverage
+npm run build
+```
+
+## Quality Checks
+
+Before submitting, run:
+
+```bash
+npm run lint
+npx vitest run
+npm run test:coverage
+npm run build
+```
+
+Husky is configured at the repository root to run lint before commits.
