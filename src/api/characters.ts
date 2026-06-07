@@ -1,6 +1,7 @@
+import { config } from '../config';
 import type { Character, CharactersResponse } from './characters.interfaces';
 
-const BASE_URL = 'https://rickandmortyapi.com/api/character';
+const BASE_URL = config.apiUrl;
 
 export const fetchCharacters = async (
   searchTerm: string,

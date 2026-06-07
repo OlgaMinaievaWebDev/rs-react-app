@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   Outlet,
   useLocation,
@@ -6,13 +7,15 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 
-import { fetchCharacters } from '../../api/characters';
-import type { Character } from '../../api/characters.interfaces';
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { ErrorButton } from '../../components/ErrorButton';
 import { Results } from '../../components/Results';
 import { Search } from '../../components/Search';
+import { SelectedItemsFlyout } from '../../components/SelectedItemsFlyout';
+
 import useLocalStorage from '../../hooks/useLocalStorage';
+import { useCharactersQuery } from '../../hooks/useCharactersQuery';
+
 import {
   StyledDetailsColumn,
   StyledMainLayout,
@@ -21,57 +24,37 @@ import {
   StyledPaginationLabel,
   StyledResultsColumn,
 } from './Home.styles';
-import { SelectedItemsFlyout } from '../../components/SelectedItemsFlyout';
+
 export function Home() {
   const [search, setSearch] = useLocalStorage('input');
   const [activeSearch, setActiveSearch] = useState(search);
-
-  const [items, setItems] = useState<Character[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [totalPages, setTotalPages] = useState(1);
-
   const [searchParams, setSearchParams] = useSearchParams();
   const pageParam = searchParams.get('page');
   const parsedPage = Number(pageParam);
   const currentPage = parsedPage > 0 ? parsedPage : 1;
 
+  const { data, isLoading, error } = useCharactersQuery(
+    activeSearch,
+    currentPage
+  );
+  const queryClient = useQueryClient();
   const location = useLocation();
   const navigate = useNavigate();
-
+  const items = data?.results ?? [];
+  const totalPages = data?.info?.pages ?? 1;
+  const errorMessage = error
+    ? 'Unable to load characters right now. Check your connection and try again.'
+    : null;
   const isDetails = location.pathname.includes('/details');
-  const shouldShowPagination = !isLoading && !error && items.length > 0;
+
+  const shouldShowPagination = !isLoading && !errorMessage && items.length > 0;
+  const shouldShowRefresh = !isLoading;
 
   useEffect(() => {
     if (!pageParam) {
       setSearchParams({ page: '1' });
     }
   }, [pageParam, setSearchParams]);
-
-  const loadCharacters = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const data = await fetchCharacters(activeSearch, currentPage);
-      setItems(data.results);
-      setTotalPages(data.info.pages);
-    } catch {
-      setError(
-        'Unable to load characters right now. Check your connection and try again.'
-      );
-      setItems([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [activeSearch, currentPage]);
-
-  useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      void loadCharacters();
-    }, 0);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [loadCharacters]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -92,6 +75,12 @@ export function Home() {
     navigate(`?page=${currentPage - 1}`);
   };
 
+  const handleRefreshClick = () => {
+    void queryClient.invalidateQueries({
+      queryKey: ['characters', activeSearch, currentPage],
+    });
+  };
+
   return (
     <>
       <ErrorBoundary>
@@ -102,26 +91,39 @@ export function Home() {
         />
         <StyledMainLayout $isDetailsOpen={isDetails}>
           <StyledResultsColumn $isDetailsOpen={isDetails}>
-            {shouldShowPagination && (
+            {(shouldShowPagination || shouldShowRefresh) && (
               <StyledPaginationControls>
-                <StyledPaginationButton
-                  onClick={handlePrevClick}
-                  disabled={currentPage === 1}
-                >
-                  Prev
-                </StyledPaginationButton>
-                <StyledPaginationLabel>
-                  Page {currentPage} of {totalPages}
-                </StyledPaginationLabel>
-                <StyledPaginationButton
-                  onClick={handleNextClick}
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </StyledPaginationButton>
+                {shouldShowPagination && (
+                  <>
+                    <StyledPaginationButton
+                      onClick={handlePrevClick}
+                      disabled={currentPage === 1}
+                    >
+                      Prev
+                    </StyledPaginationButton>
+                    <StyledPaginationLabel>
+                      Page {currentPage} of {totalPages}
+                    </StyledPaginationLabel>
+                    <StyledPaginationButton
+                      onClick={handleNextClick}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </StyledPaginationButton>
+                  </>
+                )}
+                {shouldShowRefresh && (
+                  <StyledPaginationButton
+                    type="button"
+                    onClick={handleRefreshClick}
+                  >
+                    Refresh
+                  </StyledPaginationButton>
+                )}
               </StyledPaginationControls>
             )}
-            <Results items={items} isLoading={isLoading} error={error} />
+
+            <Results items={items} isLoading={isLoading} error={errorMessage} />
             <SelectedItemsFlyout />
           </StyledResultsColumn>
 

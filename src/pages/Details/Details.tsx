@@ -1,22 +1,26 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
-import { fetchCharacterById } from '../../api/characters';
-import type { Character } from '../../api/characters.interfaces';
-
 import { DetailsLoading } from './components';
-import { StyledCloseButton, StyledHeader, StyledPanel } from './Details.styles';
+
+import { useCharacterQuery } from '../../hooks/useCharacterQuery';
+
+import {
+  StyledDetailsActions,
+  StyledDetailsButton,
+  StyledHeader,
+  StyledPanel,
+} from './Details.styles';
 
 export function Details() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [character, setCharacter] = useState<Character | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const { id } = useParams();
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
+  const { data: character, isLoading, error } = useCharacterQuery(id);
   const queryString = searchParams.toString();
+  const queryClient = useQueryClient();
 
   const handleClose = () => {
     if (queryString) {
@@ -26,39 +30,18 @@ export function Details() {
     }
   };
 
-  const loadCharacter = useCallback(async (characterId: string) => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const data = await fetchCharacterById(characterId);
-      setCharacter(data);
-    } catch {
-      setError('Unable to load character.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const handleRefreshClick = () => {
+    void queryClient.invalidateQueries({
+      queryKey: ['character', id],
+    });
+  };
 
-  useEffect(() => {
-    if (!id) return;
-
-    const timeoutId = window.setTimeout(() => {
-      void loadCharacter(id);
-    }, 0);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [id, loadCharacter]);
-
-  if (!id) {
+  if (!id || error) {
     return <p>Unable to load character.</p>;
   }
 
   if (isLoading) {
     return <DetailsLoading />;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
   }
 
   if (!character) {
@@ -74,7 +57,14 @@ export function Details() {
         Description: {character.species} character with {character.status}{' '}
         status.
       </p>
-      <StyledCloseButton onClick={handleClose}>Close</StyledCloseButton>
+      <StyledDetailsActions>
+        <StyledDetailsButton type="button" onClick={handleRefreshClick}>
+          Refresh
+        </StyledDetailsButton>
+        <StyledDetailsButton type="button" onClick={handleClose}>
+          Close
+        </StyledDetailsButton>
+      </StyledDetailsActions>
     </StyledPanel>
   );
 }
