@@ -1,6 +1,6 @@
 export interface BasicFormValues {
   name: string;
-  age: string;
+  age: number;
   email: string;
   gender: Gender;
   terms: boolean;
@@ -18,6 +18,10 @@ export interface FormSubmission extends BasicFormValues {
   id: string;
   source: FormSource;
   createdAt: string;
+}
+
+export interface BasicFormInputValues extends Omit<BasicFormValues, 'age'> {
+  age: string;
 }
 
 export type FormProps = {

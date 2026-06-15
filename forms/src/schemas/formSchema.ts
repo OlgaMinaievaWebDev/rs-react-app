@@ -20,14 +20,11 @@ export const createFormSchema = (countries: string[]) =>
       age: z
         .string()
         .min(1, 'Age is required')
-        .refine((value) => {
-          const ageNumber = Number(value);
-          return !Number.isNaN(ageNumber);
-        }, 'Age must be a number')
-        .refine((value) => {
-          const ageNumber = Number(value);
-          return ageNumber >= 0;
-        }, 'Age cannot be negative'),
+        .pipe(
+          z.coerce
+            .number<string>('Age must be a number')
+            .min(0, 'Age cannot be negative')
+        ),
       email: z
         .string()
         .min(1, 'Email is required')

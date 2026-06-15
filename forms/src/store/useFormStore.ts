@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+
 import type {
   BasicFormValues,
   FormSource,
@@ -31,7 +32,7 @@ export const useFormStore = create<SubmissionState>()((set) => ({
       submissions: [
         {
           ...values,
-          id: Date.now().toString(),
+          id: crypto.randomUUID(),
           source,
           createdAt: new Date().toISOString(),
         },

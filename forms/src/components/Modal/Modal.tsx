@@ -14,6 +14,7 @@ export function Modal({ title, children, onClose }: ModalProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const dialogRef = useRef<HTMLDivElement>(null);
+  //I use direct DOM focus APIs only for accessibility behavior in the modal focus trap. It is not replacing React state or rendering logic. React still controls whether the modal is open; DOM APIs are used only to move keyboard focus between existing focusable elements.
   const focusableSelector =
     'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
