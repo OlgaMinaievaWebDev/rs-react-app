@@ -1,9 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
 
-import { Home } from './pages/Home';
-import { About } from './pages/About';
-import { NotFound } from './pages/NotFound';
-import { Details } from './pages/Details';
+import { Home } from './views/Home';
+import { About } from './views/About';
+import { NotFound } from './views/NotFound';
+import { Details } from './views/Details';
 import { Navbar } from './components/Navbar';
 import { StyledAppShell } from './App.styles';
 
