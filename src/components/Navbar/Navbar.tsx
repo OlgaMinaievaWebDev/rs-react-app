@@ -1,3 +1,4 @@
+'use client';
 import { useTheme } from '../../context/ThemeContext';
 import { ThemeType } from '../../context/ThemeContext/ThemeContext.interfaces';
 import { NavItem } from './NavItem';

@@ -6,7 +6,7 @@ import type { NavItemProps } from './Navbar.interfaces';
 import { StyledLink } from './Navbar.styles';
 
 export function NavItem({ children, to }: NavItemProps) {
-  const pathname = usePathname()?? '/';
+  const pathname = usePathname() ?? '/';
 
   const isHomeActive =
     to === '/' && (pathname === '/' || pathname.startsWith('/details'));
