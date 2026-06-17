@@ -2,8 +2,8 @@ import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import App from './App';
-import { renderWithProviders } from './test-utils/renderWithProviders';
+import { renderWithProviders } from '../../test-utils/renderWithProviders';
+import { Home } from '.';
 
 describe('App component', () => {
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('App component', () => {
   it('loads with empty localStorage and fetches initial characters', async () => {
     localStorage.clear();
     vi.useFakeTimers();
-    renderWithProviders(<App />);
+    renderWithProviders(<Home />);
     await act(async () => {
       await vi.advanceTimersByTimeAsync(300);
     });
@@ -37,7 +37,7 @@ describe('App component', () => {
   it('loads saved search term from localStorage', async () => {
     localStorage.setItem('input', 'rick');
     vi.useFakeTimers();
-    renderWithProviders(<App />);
+    renderWithProviders(<Home />);
     await act(async () => {
       await vi.advanceTimersByTimeAsync(300);
     });
@@ -51,7 +51,7 @@ describe('App component', () => {
   it('saves trimmed search term to localStorage when search button is clicked', async () => {
     const event = userEvent.setup();
 
-    renderWithProviders(<App />);
+    renderWithProviders(<Home />);
 
     const input = screen.getByRole('textbox');
     await event.type(input, ' rick ');

@@ -1,34 +1,24 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+
 import { describe, expect, it } from 'vitest';
 
 import { Results } from './Results';
 
 describe('Results component', () => {
   it('should show loading state', () => {
-    render(
-      <MemoryRouter>
-        <Results items={[]} isLoading error={null} />
-      </MemoryRouter>
-    );
+    render(<Results items={[]} isLoading error={null} />);
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
   it('should show error message', () => {
     render(
-      <MemoryRouter>
-        <Results items={[]} isLoading={false} error="Something went wrong" />
-      </MemoryRouter>
+      <Results items={[]} isLoading={false} error="Something went wrong" />
     );
     const errorMessage = screen.getByText('Something went wrong');
     expect(errorMessage).toBeInTheDocument();
   });
   it('should show empty state when there are no items', () => {
-    render(
-      <MemoryRouter>
-        <Results items={[]} isLoading={false} error={null} />;
-      </MemoryRouter>
-    );
+    render(<Results items={[]} isLoading={false} error={null} />);
     const emptyMessage = screen.getByText('No results');
     expect(emptyMessage).toBeInTheDocument();
   });
@@ -39,11 +29,7 @@ describe('Results component', () => {
       species: 'Human',
       status: 'Alive',
     };
-    render(
-      <MemoryRouter>
-        <Results items={[item]} isLoading={false} error={null} />
-      </MemoryRouter>
-    );
+    render(<Results items={[item]} isLoading={false} error={null} />);
     const name = screen.getByText(item.name);
     const species = screen.getByText(item.species);
     expect(name).toBeInTheDocument();

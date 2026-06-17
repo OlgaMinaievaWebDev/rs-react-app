@@ -13,10 +13,9 @@ export function About() {
       <StyledAboutParagraph>Created by Olga Minaieva.</StyledAboutParagraph>
 
       <StyledAboutParagraph>
-        This application demonstrates converting class components to functional
-        components with React hooks and implementing routing functionality with
-        React Router, including nested routes, detailed views, and URL-based
-        navigation.
+        This application demonstrates migration from a Vite React SPA to Next.js
+        App Router, including file-based routing, dynamic routes, URL-based
+        navigation, cached API queries, and interactive client components.
       </StyledAboutParagraph>
 
       <StyledAboutLink
