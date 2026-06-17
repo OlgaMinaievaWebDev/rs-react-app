@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import {
-  Outlet,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { ErrorButton } from '../../components/ErrorButton';
@@ -28,7 +23,7 @@ import {
 export function Home() {
   const [search, setSearch] = useLocalStorage('input');
   const [activeSearch, setActiveSearch] = useState(search);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams() ?? new URLSearchParams();
   const pageParam = searchParams.get('page');
   const parsedPage = Number(pageParam);
   const currentPage = parsedPage > 0 ? parsedPage : 1;
@@ -38,23 +33,23 @@ export function Home() {
     currentPage
   );
   const queryClient = useQueryClient();
-  const location = useLocation();
-  const navigate = useNavigate();
+  const router = useRouter();
+  const pathname = usePathname() ?? '/';
   const items = data?.results ?? [];
   const totalPages = data?.info?.pages ?? 1;
   const errorMessage = error
     ? 'Unable to load characters right now. Check your connection and try again.'
     : null;
-  const isDetails = location.pathname.includes('/details');
+  const isDetails = pathname.startsWith('/details');
 
   const shouldShowPagination = !isLoading && !errorMessage && items.length > 0;
   const shouldShowRefresh = !isLoading;
 
   useEffect(() => {
     if (!pageParam) {
-      setSearchParams({ page: '1' });
+      router.replace('/?page=1');
     }
-  }, [pageParam, setSearchParams]);
+  }, [pageParam, router]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -64,15 +59,15 @@ export function Home() {
     const trimmed = search.trim();
     setSearch(trimmed);
     setActiveSearch(trimmed);
-    navigate('/?page=1');
+    router.push('/?page=1');
   };
 
   const handleNextClick = () => {
-    navigate(`?page=${currentPage + 1}`);
+    router.push(`/?page=${currentPage + 1}`);
   };
 
   const handlePrevClick = () => {
-    navigate(`?page=${currentPage - 1}`);
+    router.push(`/?page=${currentPage - 1}`);
   };
 
   const handleRefreshClick = () => {
@@ -127,9 +122,9 @@ export function Home() {
             <SelectedItemsFlyout />
           </StyledResultsColumn>
 
-          <StyledDetailsColumn $alignWithResults={shouldShowPagination}>
-            <Outlet />
-          </StyledDetailsColumn>
+          <StyledDetailsColumn
+            $alignWithResults={shouldShowPagination}
+          ></StyledDetailsColumn>
         </StyledMainLayout>
         <ErrorButton />
       </ErrorBoundary>

@@ -1,34 +1,26 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Route, Routes, useLocation } from 'react-router-dom';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Details } from './Details';
 import {
   createTestQueryClient,
   renderWithProviders,
 } from '../../test-utils/renderWithProviders';
-
-function LocationDisplay() {
-  const location = useLocation();
-
-  return <p>{location.search}</p>;
-}
+import { mockRouterPush, setMockSearchParams } from '../../setupTests';
 
 const renderDetails = (
-  initialEntry = '/details/1?page=3',
   queryClient = createTestQueryClient()
 ) => {
-  return renderWithProviders(
-    <Routes>
-      <Route path="/details/:id" element={<Details />} />
-      <Route path="/" element={<LocationDisplay />} />
-    </Routes>,
-    { initialEntries: [initialEntry], queryClient }
-  );
+  return renderWithProviders(<Details />, { queryClient });
 };
 
 describe('Details component', () => {
+  beforeEach(() => {
+    mockRouterPush.mockClear();
+    setMockSearchParams('page=3');
+  });
+
   it('shows loading state before character data is loaded', () => {
     vi.spyOn(globalThis, 'fetch').mockReturnValue(
       new Promise(() => {}) as Promise<Response>
@@ -83,7 +75,7 @@ describe('Details component', () => {
     expect(await screen.findByText(/Rick/)).toBeInTheDocument();
     const closeBtn = screen.getByRole('button', { name: /close/i });
     await event.click(closeBtn);
-    expect(await screen.findByText('?page=3')).toBeInTheDocument();
+    expect(mockRouterPush).toHaveBeenCalledWith('/?page=3');
   });
 
   it('refetches character when refresh is clicked', async () => {
@@ -125,13 +117,13 @@ describe('Details component', () => {
     } as Response);
     const callsBeforeFirstRender = fetchMock.mock.calls.length;
 
-    const firstRender = renderDetails('/details/1?page=3', queryClient);
+    const firstRender = renderDetails(queryClient);
     expect(await screen.findByText(/Rick/)).toBeInTheDocument();
     const callsAfterFirstRender = fetchMock.mock.calls.length;
     expect(callsAfterFirstRender).toBeGreaterThan(callsBeforeFirstRender);
 
     firstRender.unmount();
-    renderDetails('/details/1?page=3', queryClient);
+    renderDetails(queryClient);
 
     expect(await screen.findByText(/Rick/)).toBeInTheDocument();
     expect(fetchMock.mock.calls.length).toBe(callsAfterFirstRender);

@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'next/navigation';
 
 import { useSelectedCharactersStore } from '../../store/store';
 import { Loader } from '../Loader';
@@ -10,7 +10,7 @@ import {
 } from './Results.styles';
 
 export function Results({ items, isLoading, error }: ResultsProps) {
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams() ?? new URLSearchParams();
   const params = searchParams.toString();
 
   const selectedCharacters = useSelectedCharactersStore(
@@ -43,7 +43,10 @@ export function Results({ items, isLoading, error }: ResultsProps) {
           );
 
           return (
-            <StyledResultCard to={`details/${item.id}?${params}`} key={item.id}>
+            <StyledResultCard
+              href={`details/${item.id}?${params}`}
+              key={item.id}
+            >
               <h3>{item.name}</h3>
               <StyledCheckbox
                 type="checkbox"

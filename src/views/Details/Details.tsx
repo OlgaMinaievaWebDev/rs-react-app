@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
+import { useParams, useSearchParams, useRouter } from 'next/navigation';
 
 import { DetailsLoading } from './components';
 
@@ -13,10 +13,11 @@ import {
 } from './Details.styles';
 
 export function Details() {
-  const { id } = useParams();
+  const params = useParams<{ id: string }>();
+  const id = params.id;
 
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams() ?? new URLSearchParams();
 
   const { data: character, isLoading, error } = useCharacterQuery(id);
   const queryString = searchParams.toString();
@@ -24,9 +25,9 @@ export function Details() {
 
   const handleClose = () => {
     if (queryString) {
-      navigate(`/?${queryString}`);
+      router.push(`/?${queryString}`);
     } else {
-      navigate('/');
+      router.push('/');
     }
   };
 

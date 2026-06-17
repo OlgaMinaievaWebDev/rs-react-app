@@ -5,12 +5,18 @@ export default function useLocalStorage(
   initialValue: string = ''
 ): [string, (newValue: string) => void] {
   const [value, setValue] = useState<string>(() => {
+    if (typeof window === 'undefined') {
+      return initialValue;
+    }
+
     return localStorage.getItem(key) ?? initialValue;
   });
 
   const setStoredValue = (newValue: string) => {
     setValue(newValue);
-    localStorage.setItem(key, newValue);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(key, newValue);
+    }
   };
 
   return [value, setStoredValue];

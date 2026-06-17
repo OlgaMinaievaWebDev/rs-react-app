@@ -10,7 +10,7 @@ export function NotFound() {
     <StyledNotFoundSection>
       <StyledNotFoundHeader>404</StyledNotFoundHeader>
       <StyledNotFoundParagraph>Page not found</StyledNotFoundParagraph>
-      <StyledNotFoundLink to={'/'}>Return Home</StyledNotFoundLink>
+      <StyledNotFoundLink href={'/'}>Return Home</StyledNotFoundLink>
     </StyledNotFoundSection>
   );
 }
