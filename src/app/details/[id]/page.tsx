@@ -5,7 +5,7 @@ import { Details } from '../../../views/Details';
 export default function Page() {
   return (
     <Suspense>
-      <Details />;
+      <Details />
     </Suspense>
   );
 }

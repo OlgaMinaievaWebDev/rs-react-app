@@ -9,9 +9,7 @@ import {
 } from '../../test-utils/renderWithProviders';
 import { mockRouterPush, setMockSearchParams } from '../../setupTests';
 
-const renderDetails = (
-  queryClient = createTestQueryClient()
-) => {
+const renderDetails = (queryClient = createTestQueryClient()) => {
   return renderWithProviders(<Details />, { queryClient });
 };
 

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Providers } from './providers';
 import { Navbar } from '../components/Navbar';
+import { StyledAppShell } from './layout.styles';
 
 export const metadata: Metadata = {
   title: 'Rick and Morty Character Explorer',
@@ -20,8 +21,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>
-          <Navbar />
-          {children}
+          <StyledAppShell>
+            <Navbar />
+            {children}
+          </StyledAppShell>
         </Providers>
       </body>
     </html>
