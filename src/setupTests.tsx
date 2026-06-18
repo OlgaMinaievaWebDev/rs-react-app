@@ -19,3 +19,23 @@ vi.mock('next/navigation', () => ({
   useParams: () => ({ id: '1' }),
   useSearchParams: () => mockSearchParams,
 }));
+
+vi.mock('./i18n/navigation', () => ({
+  Link: ({
+    children,
+    href,
+    ...props
+  }: React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+    href: string;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  ),
+  useRouter: () => ({
+    push: mockRouterPush,
+    replace: mockRouterReplace,
+    prefetch: vi.fn(),
+  }),
+  usePathname: () => '/',
+}));

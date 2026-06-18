@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from '../../i18n/navigation';
 
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { ErrorButton } from '../../components/ErrorButton';

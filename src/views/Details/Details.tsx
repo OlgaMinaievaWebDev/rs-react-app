@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useParams, useSearchParams, useRouter } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useRouter } from '../../i18n/navigation';
 import Image from 'next/image';
 
 import { DetailsLoading } from './components';

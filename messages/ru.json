@@ -1,0 +1,14 @@
+{
+  "Navigation": {
+    "home": "Главная",
+    "about": "О проекте",
+    "themeDark": "Темная",
+    "themeLight": "Светлая"
+  },
+  "Common": {
+    "search": "Поиск",
+    "refresh": "Обновить",
+    "close": "Закрыть",
+    "loading": "Загрузка..."
+  }
+}

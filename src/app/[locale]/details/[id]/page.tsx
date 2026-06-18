@@ -1,11 +1,11 @@
 'use client';
 import { Suspense } from 'react';
-import { Home } from '../views/Home';
+import { Details } from '../../../../views/Details';
 
 export default function Page() {
   return (
     <Suspense>
-      <Home />
+      <Details />
     </Suspense>
   );
 }

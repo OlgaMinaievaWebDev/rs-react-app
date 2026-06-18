@@ -1,0 +1,14 @@
+{
+  "Navigation": {
+    "home": "Home",
+    "about": "About",
+    "themeDark": "Dark",
+    "themeLight": "Light"
+  },
+  "Common": {
+    "search": "Search",
+    "refresh": "Refresh",
+    "close": "Close",
+    "loading": "Loading..."
+  }
+}
