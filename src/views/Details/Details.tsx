@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 import { DetailsLoading } from './components';
 
@@ -10,6 +11,7 @@ import {
   StyledDetailsButton,
   StyledHeader,
   StyledPanel,
+  StyledImageWrapper,
 } from './Details.styles';
 
 export function Details() {
@@ -51,6 +53,14 @@ export function Details() {
 
   return (
     <StyledPanel>
+      <StyledImageWrapper>
+        <Image
+          src={character.image}
+          alt={`${character.name} character portrait`}
+          width={220}
+          height={220}
+        />
+      </StyledImageWrapper>
       <StyledHeader>{character.name}</StyledHeader>
       <p>Species: {character.species}</p>
       <p>Status: {character.status}</p>

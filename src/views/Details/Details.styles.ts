@@ -52,3 +52,14 @@ export const StyledDetailsButton = styled.button`
     outline-offset: 2px;
   }
 `;
+
+export const StyledImageWrapper = styled.div`
+  overflow: hidden;
+  align-self: flex-start;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+
+  img {
+    display: block;
+  }
+`;
