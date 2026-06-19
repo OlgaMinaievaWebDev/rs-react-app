@@ -1,7 +1,6 @@
 import { useTranslations } from 'next-intl';
 
 import { useSelectedCharactersStore } from '../../store/store';
-import { createCharactersCsv, downloadFile } from '../../utils/csv';
 import {
   StyledFlyoutActions,
   StyledFlyoutButton,
@@ -21,15 +20,6 @@ export function SelectedItemsFlyout() {
     (state) => state.clearCharacters
   );
 
-  const handleDownload = () => {
-    const csvContent = createCharactersCsv(
-      selectedCharacters,
-      window.location.origin
-    );
-
-    downloadFile(csvContent, `${selectedCount}_items.csv`);
-  };
-
   if (selectedCount === 0) {
     return null;
   }
@@ -39,12 +29,19 @@ export function SelectedItemsFlyout() {
       <StyledFlyoutContent>
         <span>{t('selected', { count: selectedCount })}</span>
         <StyledFlyoutActions>
-          <StyledFlyoutButton onClick={clearSelection}>
+          <StyledFlyoutButton type="button" onClick={clearSelection}>
             {t('unselectAll')}
           </StyledFlyoutButton>
-          <StyledFlyoutButton onClick={handleDownload}>
-            {t('download')}
-          </StyledFlyoutButton>
+          <form action="/api/csv" method="POST">
+            <input
+              type="hidden"
+              name="characters"
+              value={JSON.stringify(selectedCharacters)}
+            />
+            <StyledFlyoutButton type="submit">
+              {t('download')}
+            </StyledFlyoutButton>
+          </form>
         </StyledFlyoutActions>
       </StyledFlyoutContent>
     </StyledSelectedItemsFlyout>

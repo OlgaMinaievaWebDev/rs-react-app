@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "Rick and Morty Character Explorer",
+    "description": "Search, browse, and explore Rick and Morty characters, view details, and export selected results."
+  },
   "Navigation": {
     "home": "Home",
     "about": "About",
