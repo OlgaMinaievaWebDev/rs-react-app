@@ -1,4 +1,7 @@
+'use client';
+
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useRouter } from '../../i18n/navigation';
 import Image from 'next/image';
@@ -16,6 +19,7 @@ import {
 } from './Details.styles';
 
 export function Details() {
+  const t = useTranslations('Details');
   const params = useParams<{ id: string }>();
   const id = params.id;
 
@@ -41,7 +45,7 @@ export function Details() {
   };
 
   if (!id || error) {
-    return <p>Unable to load character.</p>;
+    return <p>{t('unableToLoad')}</p>;
   }
 
   if (isLoading) {
@@ -49,7 +53,7 @@ export function Details() {
   }
 
   if (!character) {
-    return <p>No character</p>;
+    return <p>{t('empty')}</p>;
   }
 
   return (
@@ -57,24 +61,26 @@ export function Details() {
       <StyledImageWrapper>
         <Image
           src={character.image}
-          alt={`${character.name} character portrait`}
+          alt={t('imageAlt', { name: character.name })}
           width={220}
           height={220}
         />
       </StyledImageWrapper>
       <StyledHeader>{character.name}</StyledHeader>
-      <p>Species: {character.species}</p>
-      <p>Status: {character.status}</p>
+      <p>{t('species', { species: character.species })}</p>
+      <p>{t('status', { status: character.status })}</p>
       <p>
-        Description: {character.species} character with {character.status}{' '}
-        status.
+        {t('description', {
+          species: character.species,
+          status: character.status,
+        })}
       </p>
       <StyledDetailsActions>
         <StyledDetailsButton type="button" onClick={handleRefreshClick}>
-          Refresh
+          {t('refresh')}
         </StyledDetailsButton>
         <StyledDetailsButton type="button" onClick={handleClose}>
-          Close
+          {t('close')}
         </StyledDetailsButton>
       </StyledDetailsActions>
     </StyledPanel>

@@ -1,5 +1,6 @@
-import Link from 'next/link';
 import styled from 'styled-components';
+
+import { Link } from '../../i18n/navigation';
 
 export const StyledResultsSection = styled.section`
   background: var(--surface);

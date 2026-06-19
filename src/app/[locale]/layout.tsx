@@ -1,4 +1,5 @@
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '../../i18n/routing';
 import { Providers } from '../providers';
@@ -21,16 +22,24 @@ export default async function RootLayout({ children, params }: Props) {
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+
+  setRequestLocale(locale);
+  const messages = await getMessages({ locale });
+
   return (
-    <NextIntlClientProvider>
-      <StyledComponentsRegistry>
-        <Providers>
-          <StyledAppShell>
-            <Navbar />
-            {children}
-          </StyledAppShell>
-        </Providers>
-      </StyledComponentsRegistry>
-    </NextIntlClientProvider>
+    <html lang={locale}>
+      <body>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <StyledComponentsRegistry>
+            <Providers>
+              <StyledAppShell>
+                <Navbar />
+                {children}
+              </StyledAppShell>
+            </Providers>
+          </StyledComponentsRegistry>
+        </NextIntlClientProvider>
+      </body>
+    </html>
   );
 }

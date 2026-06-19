@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import type { SearchProps } from './Search.interfaces';
 
 import {
@@ -7,16 +9,18 @@ import {
 } from './Search.styles';
 
 export function Search({ value, onChange, onSearch }: SearchProps) {
+  const t = useTranslations('Search');
+
   return (
     <StyledSearchHeader>
       <StyledInput
         value={value}
         onChange={onChange}
         type="text"
-        placeholder="Search for item"
+        placeholder={t('placeholder')}
       />
       <StyledSearchButton type="button" onClick={onSearch}>
-        Search
+        {t('button')}
       </StyledSearchButton>
     </StyledSearchHeader>
   );

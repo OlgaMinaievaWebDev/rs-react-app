@@ -1,5 +1,8 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { usePathname, useRouter } from '../../i18n/navigation';
 
@@ -22,6 +25,7 @@ import {
 } from './Home.styles';
 
 export function Home() {
+  const t = useTranslations('Home');
   const [search, setSearch] = useLocalStorage('input');
   const [activeSearch, setActiveSearch] = useState(search);
   const searchParams = useSearchParams() ?? new URLSearchParams();
@@ -38,9 +42,7 @@ export function Home() {
   const pathname = usePathname() ?? '/';
   const items = data?.results ?? [];
   const totalPages = data?.info?.pages ?? 1;
-  const errorMessage = error
-    ? 'Unable to load characters right now. Check your connection and try again.'
-    : null;
+  const errorMessage = error ? t('loadError') : null;
   const isDetails = pathname.startsWith('/details');
 
   const shouldShowPagination = !isLoading && !errorMessage && items.length > 0;
@@ -95,16 +97,16 @@ export function Home() {
                       onClick={handlePrevClick}
                       disabled={currentPage === 1}
                     >
-                      Prev
+                      {t('prev')}
                     </StyledPaginationButton>
                     <StyledPaginationLabel>
-                      Page {currentPage} of {totalPages}
+                      {t('page', { currentPage, totalPages })}
                     </StyledPaginationLabel>
                     <StyledPaginationButton
                       onClick={handleNextClick}
                       disabled={currentPage === totalPages}
                     >
-                      Next
+                      {t('next')}
                     </StyledPaginationButton>
                   </>
                 )}
@@ -113,7 +115,7 @@ export function Home() {
                     type="button"
                     onClick={handleRefreshClick}
                   >
-                    Refresh
+                    {t('refresh')}
                   </StyledPaginationButton>
                 )}
               </StyledPaginationControls>

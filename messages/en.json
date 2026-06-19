@@ -10,5 +10,48 @@
     "refresh": "Refresh",
     "close": "Close",
     "loading": "Loading..."
+  },
+  "Search": {
+    "placeholder": "Search for character",
+    "button": "Search"
+  },
+  "Home": {
+    "prev": "Prev",
+    "next": "Next",
+    "page": "Page {currentPage} of {totalPages}",
+    "refresh": "Refresh",
+    "loadError": "Unable to load characters right now. Check your connection and try again."
+  },
+  "Results": {
+    "loading": "Loading...",
+    "empty": "No results",
+    "select": "Select {name}"
+  },
+  "Details": {
+    "loading": "Loading...",
+    "loadingLabel": "Loading character details",
+    "unableToLoad": "Unable to load character.",
+    "empty": "No character",
+    "imageAlt": "{name} character portrait",
+    "species": "Species: {species}",
+    "status": "Status: {status}",
+    "description": "Description: {species} character with {status} status.",
+    "refresh": "Refresh",
+    "close": "Close"
+  },
+  "Flyout": {
+    "selected": "{count} selected",
+    "unselectAll": "Unselect all",
+    "download": "Download"
+  },
+  "About": {
+    "title": "About",
+    "subtitle": "Created by Olga Minaieva.",
+    "description": "This application demonstrates migration from a Vite React SPA to Next.js App Router, including file-based routing, dynamic routes, URL-based navigation, cached API queries, and interactive client components.",
+    "courseLink": "RS School React Course"
+  },
+  "NotFound": {
+    "message": "Page not found",
+    "home": "Return Home"
   }
 }

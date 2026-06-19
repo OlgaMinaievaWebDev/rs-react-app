@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import { useSelectedCharactersStore } from '../../store/store';
 import { createCharactersCsv, downloadFile } from '../../utils/csv';
 import {
@@ -8,6 +10,7 @@ import {
 } from './SelectedItemsFlyout.style';
 
 export function SelectedItemsFlyout() {
+  const t = useTranslations('Flyout');
   const selectedCharacters = useSelectedCharactersStore(
     (state) => state.selectedCharacters
   );
@@ -34,13 +37,13 @@ export function SelectedItemsFlyout() {
   return (
     <StyledSelectedItemsFlyout>
       <StyledFlyoutContent>
-        <span>{selectedCount} selected</span>
+        <span>{t('selected', { count: selectedCount })}</span>
         <StyledFlyoutActions>
           <StyledFlyoutButton onClick={clearSelection}>
-            Unselect all
+            {t('unselectAll')}
           </StyledFlyoutButton>
           <StyledFlyoutButton onClick={handleDownload}>
-            Download
+            {t('download')}
           </StyledFlyoutButton>
         </StyledFlyoutActions>
       </StyledFlyoutContent>

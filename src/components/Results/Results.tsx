@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 
 import { useSelectedCharactersStore } from '../../store/store';
@@ -10,6 +11,7 @@ import {
 } from './Results.styles';
 
 export function Results({ items, isLoading, error }: ResultsProps) {
+  const t = useTranslations('Results');
   const searchParams = useSearchParams() ?? new URLSearchParams();
   const params = searchParams.toString();
 
@@ -30,11 +32,11 @@ export function Results({ items, isLoading, error }: ResultsProps) {
       {isLoading && (
         <>
           <Loader />
-          <p>Loading...</p>
+          <p>{t('loading')}</p>
         </>
       )}
       {error && <p>{error}</p>}
-      {!isLoading && !error && !items.length && <p>No results</p>}
+      {!isLoading && !error && !items.length && <p>{t('empty')}</p>}
       {!isLoading &&
         !error &&
         items.map((item) => {
@@ -44,13 +46,13 @@ export function Results({ items, isLoading, error }: ResultsProps) {
 
           return (
             <StyledResultCard
-              href={`details/${item.id}?${params}`}
+              href={`/details/${item.id}${params ? `?${params}` : ''}`}
               key={item.id}
             >
               <h3>{item.name}</h3>
               <StyledCheckbox
                 type="checkbox"
-                aria-label={`Select ${item.name}`}
+                aria-label={t('select', { name: item.name })}
                 checked={isSelected}
                 onClick={(event) => {
                   event.stopPropagation();
