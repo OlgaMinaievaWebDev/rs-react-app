@@ -3,6 +3,7 @@ import { vi } from 'vitest';
 
 export const mockRouterPush = vi.fn();
 export const mockRouterReplace = vi.fn();
+export const mockRouterRefresh = vi.fn();
 let mockSearchParams = new URLSearchParams('page=1');
 
 export const setMockSearchParams = (searchParams: string) => {
@@ -13,6 +14,7 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockRouterPush,
     replace: mockRouterReplace,
+    refresh: mockRouterRefresh,
     prefetch: vi.fn(),
   }),
   usePathname: () => '/',
@@ -35,6 +37,7 @@ vi.mock('./i18n/navigation', () => ({
   useRouter: () => ({
     push: mockRouterPush,
     replace: mockRouterReplace,
+    refresh: mockRouterRefresh,
     prefetch: vi.fn(),
   }),
   usePathname: () => '/',

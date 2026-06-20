@@ -1,136 +1,45 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
-import { useSearchParams } from 'next/navigation';
-import { usePathname, useRouter } from '../../i18n/navigation';
-
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { ErrorButton } from '../../components/ErrorButton';
 import { Results } from '../../components/Results';
-import { Search } from '../../components/Search';
 import { SelectedItemsFlyout } from '../../components/SelectedItemsFlyout';
-
-import useLocalStorage from '../../hooks/useLocalStorage';
-import { useCharactersQuery } from '../../hooks/useCharactersQuery';
-
+import type { CharactersResponse } from '../../api/characters.interfaces';
 import {
   StyledDetailsColumn,
   StyledMainLayout,
-  StyledPaginationButton,
-  StyledPaginationControls,
-  StyledPaginationLabel,
   StyledResultsColumn,
 } from './Home.styles';
+import { PaginationControls } from './PaginationControls';
+import { SearchControls } from './SearchControls';
 
-export function Home() {
-  const t = useTranslations('Home');
-  const [search, setSearch] = useLocalStorage('input');
-  const [activeSearch, setActiveSearch] = useState(search);
-  const searchParams = useSearchParams() ?? new URLSearchParams();
-  const pageParam = searchParams.get('page');
-  const parsedPage = Number(pageParam);
-  const currentPage = parsedPage > 0 ? parsedPage : 1;
+export type HomeProps = {
+  initialData: CharactersResponse;
+  currentPage: number;
+  searchTerm: string;
+};
 
-  const { data, isLoading, error } = useCharactersQuery(
-    activeSearch,
-    currentPage
-  );
-  const queryClient = useQueryClient();
-  const router = useRouter();
-  const pathname = usePathname() ?? '/';
-  const items = data?.results ?? [];
-  const totalPages = data?.info?.pages ?? 1;
-  const errorMessage = error ? t('loadError') : null;
-  const isDetails = pathname.startsWith('/details');
-
-  const shouldShowPagination = !isLoading && !errorMessage && items.length > 0;
-  const shouldShowRefresh = !isLoading;
-
-  useEffect(() => {
-    if (!pageParam) {
-      router.replace('/?page=1');
-    }
-  }, [pageParam, router]);
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-  };
-
-  const handleSearchClick = () => {
-    const trimmed = search.trim();
-    setSearch(trimmed);
-    setActiveSearch(trimmed);
-    router.push('/?page=1');
-  };
-
-  const handleNextClick = () => {
-    router.push(`/?page=${currentPage + 1}`);
-  };
-
-  const handlePrevClick = () => {
-    router.push(`/?page=${currentPage - 1}`);
-  };
-
-  const handleRefreshClick = () => {
-    void queryClient.invalidateQueries({
-      queryKey: ['characters', activeSearch, currentPage],
-    });
-  };
+export function Home({ initialData, currentPage, searchTerm }: HomeProps) {
+  const items = initialData.results;
+  const totalPages = initialData.info.pages;
+  const hasResults = items.length > 0;
 
   return (
-    <>
-      <ErrorBoundary>
-        <Search
-          value={search}
-          onChange={handleSearch}
-          onSearch={handleSearchClick}
-        />
-        <StyledMainLayout $isDetailsOpen={isDetails}>
-          <StyledResultsColumn $isDetailsOpen={isDetails}>
-            {(shouldShowPagination || shouldShowRefresh) && (
-              <StyledPaginationControls>
-                {shouldShowPagination && (
-                  <>
-                    <StyledPaginationButton
-                      onClick={handlePrevClick}
-                      disabled={currentPage === 1}
-                    >
-                      {t('prev')}
-                    </StyledPaginationButton>
-                    <StyledPaginationLabel>
-                      {t('page', { currentPage, totalPages })}
-                    </StyledPaginationLabel>
-                    <StyledPaginationButton
-                      onClick={handleNextClick}
-                      disabled={currentPage === totalPages}
-                    >
-                      {t('next')}
-                    </StyledPaginationButton>
-                  </>
-                )}
-                {shouldShowRefresh && (
-                  <StyledPaginationButton
-                    type="button"
-                    onClick={handleRefreshClick}
-                  >
-                    {t('refresh')}
-                  </StyledPaginationButton>
-                )}
-              </StyledPaginationControls>
-            )}
+    <ErrorBoundary>
+      <SearchControls searchTerm={searchTerm} />
+      <StyledMainLayout $isDetailsOpen={false}>
+        <StyledResultsColumn $isDetailsOpen={false}>
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            searchTerm={searchTerm}
+            hasResults={hasResults}
+          />
+          <Results items={items} isLoading={false} error={null} />
+          <SelectedItemsFlyout />
+        </StyledResultsColumn>
 
-            <Results items={items} isLoading={isLoading} error={errorMessage} />
-            <SelectedItemsFlyout />
-          </StyledResultsColumn>
-
-          <StyledDetailsColumn
-            $alignWithResults={shouldShowPagination}
-          ></StyledDetailsColumn>
-        </StyledMainLayout>
-        <ErrorButton />
-      </ErrorBoundary>
-    </>
+        <StyledDetailsColumn $alignWithResults={hasResults} />
+      </StyledMainLayout>
+      <ErrorButton />
+    </ErrorBoundary>
   );
 }

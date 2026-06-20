@@ -1,71 +1,66 @@
-import { act, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
+import type { CharactersResponse } from '../../api/characters.interfaces';
+import { mockRouterPush } from '../../setupTests';
 import { renderWithProviders } from '../../test-utils/renderWithProviders';
 import { Home } from '.';
 
-describe('App component', () => {
+const emptyInitialData: CharactersResponse = {
+  results: [],
+  info: { pages: 1 },
+};
+
+describe('Home component', () => {
   beforeEach(() => {
     localStorage.clear();
-    vi.restoreAllMocks();
-    globalThis.fetch = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        results: [],
-        info: { pages: 1 },
-      }),
-    });
+    mockRouterPush.mockClear();
   });
 
-  afterEach(() => {
-    vi.useRealTimers();
-  });
+  it('renders characters provided by the server', () => {
+    const initialData: CharactersResponse = {
+      results: [
+        {
+          id: 1,
+          name: 'Rick Sanchez',
+          image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
+          species: 'Human',
+          status: 'Alive',
+        },
+      ],
+      info: { pages: 1 },
+    };
 
-  it('loads with empty localStorage and fetches initial characters', async () => {
-    localStorage.clear();
-    vi.useFakeTimers();
-    renderWithProviders(<Home />);
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(300);
-    });
-    expect(fetch).toHaveBeenLastCalledWith(
-      'https://rickandmortyapi.com/api/character/?page=1'
+    renderWithProviders(
+      <Home initialData={initialData} currentPage={1} searchTerm="" />
     );
+
+    expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
   });
 
-  it('loads saved search term from localStorage', async () => {
+  it('loads a saved search term from localStorage', () => {
     localStorage.setItem('input', 'rick');
-    vi.useFakeTimers();
-    renderWithProviders(<Home />);
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(300);
-    });
-    const input = screen.getByRole('textbox');
-    expect(input).toHaveValue('rick');
-    expect(fetch).toHaveBeenLastCalledWith(
-      'https://rickandmortyapi.com/api/character/?page=1&name=rick'
+
+    renderWithProviders(
+      <Home initialData={emptyInitialData} currentPage={1} searchTerm="" />
     );
+
+    expect(screen.getByRole('textbox')).toHaveValue('rick');
   });
 
-  it('saves trimmed search term to localStorage when search button is clicked', async () => {
-    const event = userEvent.setup();
+  it('stores a trimmed search term and navigates with URL parameters', async () => {
+    const user = userEvent.setup();
 
-    renderWithProviders(<Home />);
+    renderWithProviders(
+      <Home initialData={emptyInitialData} currentPage={1} searchTerm="" />
+    );
 
     const input = screen.getByRole('textbox');
-    await event.type(input, ' rick ');
-
-    const searchButton = screen.getByRole('button', { name: /search/i });
-    await event.click(searchButton);
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 350));
-    });
+    await user.type(input, ' rick ');
+    await user.click(screen.getByRole('button', { name: /search/i }));
 
     expect(localStorage.getItem('input')).toBe('rick');
-    expect(fetch).toHaveBeenLastCalledWith(
-      'https://rickandmortyapi.com/api/character/?page=1&name=rick'
-    );
+    expect(mockRouterPush).toHaveBeenCalledWith('/?page=1&search=rick');
   });
 });

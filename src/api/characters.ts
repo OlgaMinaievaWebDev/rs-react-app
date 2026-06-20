@@ -15,6 +15,13 @@ export const fetchCharacters = async (
 
   const response = await fetch(`${BASE_URL}/?${params.toString()}`);
 
+  if (response.status === 404) {
+    return {
+      results: [],
+      info: { pages: 0 },
+    };
+  }
+
   if (!response.ok) {
     throw new Error('Request failed');
   }
