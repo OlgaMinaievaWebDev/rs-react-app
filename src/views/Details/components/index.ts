@@ -1,1 +1,1 @@
-export { DetailsLoading } from './DetailsLoading';
+export { DetailsActions } from './DetailsActions';

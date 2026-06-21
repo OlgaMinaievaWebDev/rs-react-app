@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { ErrorButton } from '../../components/ErrorButton';
 import { Results } from '../../components/Results';
@@ -15,14 +16,21 @@ export type HomeProps = {
   initialData: CharactersResponse;
   currentPage: number;
   searchTerm: string;
+  detailsPanel?: ReactNode;
 };
 
-export function Home({ initialData, currentPage, searchTerm }: HomeProps) {
+export function Home({
+  initialData,
+  currentPage,
+  searchTerm,
+  detailsPanel,
+}: HomeProps) {
   const items = initialData.results;
   const totalPages = initialData.info.pages;
   const hasResults = items.length > 0;
   const resultParams = new URLSearchParams({ page: String(currentPage) });
 
+  const isDetailsOpen = Boolean(detailsPanel);
   if (searchTerm) {
     resultParams.set('search', searchTerm);
   }
@@ -32,8 +40,8 @@ export function Home({ initialData, currentPage, searchTerm }: HomeProps) {
   return (
     <ErrorBoundary>
       <SearchControls searchTerm={searchTerm} />
-      <StyledMainLayout $isDetailsOpen={false}>
-        <StyledResultsColumn $isDetailsOpen={false}>
+      <StyledMainLayout $isDetailsOpen={isDetailsOpen}>
+        <StyledResultsColumn $isDetailsOpen={isDetailsOpen}>
           <PaginationControls
             currentPage={currentPage}
             totalPages={totalPages}
@@ -49,7 +57,9 @@ export function Home({ initialData, currentPage, searchTerm }: HomeProps) {
           <SelectedItemsFlyout />
         </StyledResultsColumn>
 
-        <StyledDetailsColumn $alignWithResults={hasResults} />
+        <StyledDetailsColumn $alignWithResults={hasResults}>
+          {detailsPanel}
+        </StyledDetailsColumn>
       </StyledMainLayout>
       <ErrorButton />
     </ErrorBoundary>
