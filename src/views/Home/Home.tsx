@@ -21,6 +21,13 @@ export function Home({ initialData, currentPage, searchTerm }: HomeProps) {
   const items = initialData.results;
   const totalPages = initialData.info.pages;
   const hasResults = items.length > 0;
+  const resultParams = new URLSearchParams({ page: String(currentPage) });
+
+  if (searchTerm) {
+    resultParams.set('search', searchTerm);
+  }
+
+  const queryString = resultParams.toString();
 
   return (
     <ErrorBoundary>
@@ -33,7 +40,12 @@ export function Home({ initialData, currentPage, searchTerm }: HomeProps) {
             searchTerm={searchTerm}
             hasResults={hasResults}
           />
-          <Results items={items} isLoading={false} error={null} />
+          <Results
+            items={items}
+            isLoading={false}
+            error={null}
+            queryString={queryString}
+          />
           <SelectedItemsFlyout />
         </StyledResultsColumn>
 

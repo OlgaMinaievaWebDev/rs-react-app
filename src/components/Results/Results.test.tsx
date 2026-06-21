@@ -7,18 +7,32 @@ import { Results } from './Results';
 
 describe('Results component', () => {
   it('should show loading state', () => {
-    render(<Results items={[]} isLoading error={null} />);
+    render(
+      <Results items={[]} isLoading error={null} queryString="page=1" />
+    );
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
   it('should show error message', () => {
     render(
-      <Results items={[]} isLoading={false} error="Something went wrong" />
+      <Results
+        items={[]}
+        isLoading={false}
+        error="Something went wrong"
+        queryString="page=1"
+      />
     );
     const errorMessage = screen.getByText('Something went wrong');
     expect(errorMessage).toBeInTheDocument();
   });
   it('should show empty state when there are no items', () => {
-    render(<Results items={[]} isLoading={false} error={null} />);
+    render(
+      <Results
+        items={[]}
+        isLoading={false}
+        error={null}
+        queryString="page=1"
+      />
+    );
     const emptyMessage = screen.getByText('No results');
     expect(emptyMessage).toBeInTheDocument();
   });
@@ -29,7 +43,14 @@ describe('Results component', () => {
       species: 'Human',
       status: 'Alive',
     };
-    render(<Results items={[item]} isLoading={false} error={null} />);
+    render(
+      <Results
+        items={[item]}
+        isLoading={false}
+        error={null}
+        queryString="page=1"
+      />
+    );
     const name = screen.getByText(item.name);
     const species = screen.getByText(item.species);
     expect(name).toBeInTheDocument();
