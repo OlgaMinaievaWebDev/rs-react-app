@@ -13,7 +13,6 @@ const nextConfig = {
       },
     ],
   },
-  distDir: './dist', // Changes the build output directory to `./dist/`.
 };
 
 const withNextIntl = createNextIntlPlugin();
