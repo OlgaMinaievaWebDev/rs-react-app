@@ -1,7 +1,7 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import type { Character } from '../api/characters.interfaces';
-import { createCharactersCsv, downloadFile, escapeCsvValue } from './csv';
+import { createCharactersCsv, escapeCsvValue } from './csv';
 
 const character: Character = {
   id: 1,
@@ -26,34 +26,4 @@ describe('csv utils', () => {
     );
   });
 
-  it('should download file', () => {
-    const url = 'blob:test';
-    const click = vi.fn();
-    const link = {
-      href: '',
-      download: '',
-      click,
-    } as unknown as HTMLAnchorElement;
-    const createObjectURL = vi
-      .spyOn(URL, 'createObjectURL')
-      .mockReturnValue(url);
-    const revokeObjectURL = vi
-      .spyOn(URL, 'revokeObjectURL')
-      .mockImplementation(() => {});
-    const createElement = vi
-      .spyOn(document, 'createElement')
-      .mockReturnValue(link);
-
-    downloadFile('content', 'items.csv');
-
-    expect(createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
-    expect(link.href).toBe(url);
-    expect(link.download).toBe('items.csv');
-    expect(click).toHaveBeenCalled();
-    expect(revokeObjectURL).toHaveBeenCalledWith(url);
-
-    createObjectURL.mockRestore();
-    revokeObjectURL.mockRestore();
-    createElement.mockRestore();
-  });
 });

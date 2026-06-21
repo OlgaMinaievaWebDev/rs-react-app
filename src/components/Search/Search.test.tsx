@@ -5,30 +5,51 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { Search } from './Search';
 
+const renderSearch = (
+  onChange = vi.fn(),
+  onSubmit = vi.fn(),
+  action = vi.fn()
+) =>
+  render(
+    <Search
+      value=""
+      onChange={onChange}
+      onSubmit={onSubmit}
+      action={action}
+      locale="en"
+    />
+  );
+
 describe('Search component', () => {
-  it('should render input and button', () => {
-    const mock = vi.fn();
-    render(<Search value="" onChange={mock} onSearch={mock} />);
-    const searchButton = screen.getByRole('button', { name: /search/i });
-    expect(searchButton).toBeInTheDocument();
-    const userInput = screen.getByRole('textbox');
-    expect(userInput).toBeInTheDocument();
+  it('renders a search form', () => {
+    renderSearch();
+
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /search/i })).toHaveAttribute(
+      'type',
+      'submit'
+    );
   });
-  it('should call onChange when user types', async () => {
-    const event = userEvent.setup();
-    const mock = vi.fn();
-    render(<Search value="" onChange={mock} onSearch={mock} />);
-    const searchInput = screen.getByRole('textbox');
-    await event.type(searchInput, 'rick');
-    expect(mock).toHaveBeenCalled();
+
+  it('calls onChange when the user types', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    renderSearch(onChange);
+
+    await user.type(screen.getByRole('textbox'), 'rick');
+
+    expect(onChange).toHaveBeenCalled();
   });
-  it('should call onSearch when button clicked', async () => {
-    const event = userEvent.setup();
-    const onChangeMock = vi.fn();
-    const onSearchMock = vi.fn();
-    render(<Search value="" onChange={onChangeMock} onSearch={onSearchMock} />);
-    const searchButton = screen.getByRole('button', { name: /search/i });
-    await event.click(searchButton);
-    expect(onSearchMock).toHaveBeenCalledTimes(1);
+
+  it('submits the form action', async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn();
+    const action = vi.fn();
+    renderSearch(vi.fn(), onSubmit, action);
+
+    await user.click(screen.getByRole('button', { name: /search/i }));
+
+    expect(onSubmit).toHaveBeenCalledOnce();
+    expect(action).toHaveBeenCalledOnce();
   });
 });

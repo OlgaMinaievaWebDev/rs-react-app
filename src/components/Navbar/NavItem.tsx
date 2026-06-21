@@ -1,20 +1,18 @@
-import { NavLink, useLocation } from 'react-router-dom';
+'use client';
+import { Link, usePathname } from '../../i18n/navigation';
 
 import type { NavItemProps } from './Navbar.interfaces';
 import { StyledLink } from './Navbar.styles';
 
 export function NavItem({ children, to }: NavItemProps) {
-  const location = useLocation();
-  const isNestedHomeRoute =
-    to === '/' && location.pathname.startsWith('/details');
+  const pathname = usePathname() ?? '/';
 
+  const isHomeActive =
+    to === '/' && (pathname === '/' || pathname.startsWith('/details'));
+  const isActive = isHomeActive || pathname === to;
   return (
-    <NavLink to={to} style={{ textDecoration: 'none' }}>
-      {({ isActive }) => (
-        <StyledLink $isActive={isActive || isNestedHomeRoute}>
-          {children}
-        </StyledLink>
-      )}
-    </NavLink>
+    <Link href={to} style={{ textDecoration: 'none' }}>
+      <StyledLink $isActive={isActive}>{children}</StyledLink>
+    </Link>
   );
 }

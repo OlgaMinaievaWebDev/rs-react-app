@@ -2,11 +2,16 @@ import type { Character } from '../api/characters.interfaces';
 
 const CSV_HEADERS = ['id', 'name', 'status', 'species', 'detailsUrl'];
 
+export type CsvCharacter = Pick<
+  Character,
+  'id' | 'name' | 'status' | 'species'
+>;
+
 export const escapeCsvValue = (value: string | number) =>
   `"${String(value).replace(/"/g, '""')}"`;
 
 export const createCharactersCsv = (
-  characters: Character[],
+  characters: CsvCharacter[],
   detailsBaseUrl: string
 ) => {
   const headerRow = CSV_HEADERS.join(',');
@@ -21,14 +26,4 @@ export const createCharactersCsv = (
   );
 
   return [headerRow, ...rows].join('\n');
-};
-
-export const downloadFile = (content: string, fileName: string) => {
-  const blob = new Blob([content], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = fileName;
-  link.click();
-  URL.revokeObjectURL(url);
 };

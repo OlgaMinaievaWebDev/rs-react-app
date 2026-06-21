@@ -1,5 +1,8 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 import { useSelectedCharactersStore } from '../../store/store';
-import { createCharactersCsv, downloadFile } from '../../utils/csv';
 import {
   StyledFlyoutActions,
   StyledFlyoutButton,
@@ -8,6 +11,7 @@ import {
 } from './SelectedItemsFlyout.style';
 
 export function SelectedItemsFlyout() {
+  const t = useTranslations('Flyout');
   const selectedCharacters = useSelectedCharactersStore(
     (state) => state.selectedCharacters
   );
@@ -18,15 +22,6 @@ export function SelectedItemsFlyout() {
     (state) => state.clearCharacters
   );
 
-  const handleDownload = () => {
-    const csvContent = createCharactersCsv(
-      selectedCharacters,
-      window.location.origin
-    );
-
-    downloadFile(csvContent, `${selectedCount}_items.csv`);
-  };
-
   if (selectedCount === 0) {
     return null;
   }
@@ -34,14 +29,21 @@ export function SelectedItemsFlyout() {
   return (
     <StyledSelectedItemsFlyout>
       <StyledFlyoutContent>
-        <span>{selectedCount} selected</span>
+        <span>{t('selected', { count: selectedCount })}</span>
         <StyledFlyoutActions>
-          <StyledFlyoutButton onClick={clearSelection}>
-            Unselect all
+          <StyledFlyoutButton type="button" onClick={clearSelection}>
+            {t('unselectAll')}
           </StyledFlyoutButton>
-          <StyledFlyoutButton onClick={handleDownload}>
-            Download
-          </StyledFlyoutButton>
+          <form action="/api/csv" method="POST">
+            <input
+              type="hidden"
+              name="characters"
+              value={JSON.stringify(selectedCharacters)}
+            />
+            <StyledFlyoutButton type="submit">
+              {t('download')}
+            </StyledFlyoutButton>
+          </form>
         </StyledFlyoutActions>
       </StyledFlyoutContent>
     </StyledSelectedItemsFlyout>

@@ -10,8 +10,8 @@ TanStack Query.
 
 - React
 - TypeScript
-- Vite
-- React Router
+- Next.js
+- Next.js App Router
 - Zustand
 - TanStack Query
 - Styled Components
@@ -43,13 +43,13 @@ npm install
 Create a `.env` file in the project root:
 
 ```env
-VITE_API_URL=https://rickandmortyapi.com/api/character
-VITE_QUERY_CACHE_TTL=300000
+NEXT_PUBLIC_API_URL=https://rickandmortyapi.com/api/character
+NEXT_PUBLIC_QUERY_CACHE_TTL=300000
 ```
 
-`VITE_API_URL` controls the base API endpoint for character requests.
+`NEXT_PUBLIC_API_URL` controls the base API endpoint for character requests.
 
-`VITE_QUERY_CACHE_TTL` controls TanStack Query cache TTL in milliseconds.
+`NEXT_PUBLIC_QUERY_CACHE_TTL` controls TanStack Query cache TTL in milliseconds.
 
 Default value:
 

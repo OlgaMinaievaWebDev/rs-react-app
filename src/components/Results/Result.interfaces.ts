@@ -4,4 +4,5 @@ export interface ResultsProps {
   items: Character[];
   isLoading: boolean;
   error: string | null;
+  queryString: string;
 }
