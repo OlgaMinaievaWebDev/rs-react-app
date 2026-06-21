@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 
 import { appThemes } from '../../styles/theme';
@@ -13,10 +13,6 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
       prevTheme === ThemeType.LIGHT ? ThemeType.DARK : ThemeType.LIGHT
     );
   };
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

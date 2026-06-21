@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 export const mockRouterPush = vi.fn();
 export const mockRouterReplace = vi.fn();
 export const mockRouterRefresh = vi.fn();
+export const mockRedirect = vi.fn();
 let mockSearchParams = new URLSearchParams('page=1');
 
 export const setMockSearchParams = (searchParams: string) => {
@@ -41,6 +42,7 @@ vi.mock('./i18n/navigation', () => ({
     prefetch: vi.fn(),
   }),
   usePathname: () => '/',
+  redirect: mockRedirect,
 }));
 
 const messages: Record<string, string> = {
@@ -81,6 +83,8 @@ const interpolateMessage = (
   );
 
 vi.mock('next-intl', () => ({
+  hasLocale: (locales: readonly string[], locale: unknown) =>
+    typeof locale === 'string' && locales.includes(locale),
   useLocale: () => 'en',
   useTranslations: (namespace: string) => {
     return (key: string, values?: Record<string, string | number>) =>

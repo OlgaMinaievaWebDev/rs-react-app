@@ -47,4 +47,41 @@ describe('POST /api/csv', () => {
 
     expect(response.status).toBe(400);
   });
+
+  it('rejects requests without character data', async () => {
+    const request = new Request('http://localhost:3000/api/csv', {
+      method: 'POST',
+      body: new FormData(),
+    });
+
+    const response = await POST(request);
+
+    expect(response.status).toBe(400);
+  });
+
+  it('rejects parsed data that is not an array', async () => {
+    const formData = new FormData();
+    formData.set('characters', JSON.stringify({ id: 1 }));
+    const request = new Request('http://localhost:3000/api/csv', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const response = await POST(request);
+
+    expect(response.status).toBe(400);
+  });
+
+  it('rejects an array containing an invalid character', async () => {
+    const formData = new FormData();
+    formData.set('characters', JSON.stringify([null, { id: 'one' }]));
+    const request = new Request('http://localhost:3000/api/csv', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const response = await POST(request);
+
+    expect(response.status).toBe(400);
+  });
 });

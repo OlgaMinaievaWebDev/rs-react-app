@@ -8,18 +8,26 @@ import {
   StyledSearchHeader,
 } from './Search.styles';
 
-export function Search({ value, onChange, onSearch }: SearchProps) {
+export function Search({
+  value,
+  onChange,
+  onSubmit,
+  action,
+  locale,
+}: SearchProps) {
   const t = useTranslations('Search');
 
   return (
-    <StyledSearchHeader>
+    <StyledSearchHeader action={action} onSubmit={onSubmit}>
+      <input type="hidden" name="locale" value={locale} />
       <StyledInput
+        name="search"
         value={value}
         onChange={onChange}
         type="text"
         placeholder={t('placeholder')}
       />
-      <StyledSearchButton type="button" onClick={onSearch}>
+      <StyledSearchButton type="submit">
         {t('button')}
       </StyledSearchButton>
     </StyledSearchHeader>

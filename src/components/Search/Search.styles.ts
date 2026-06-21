@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const StyledSearchHeader = styled.header`
+export const StyledSearchHeader = styled.form`
   display: flex;
   gap: 12px;
   background: var(--surface);

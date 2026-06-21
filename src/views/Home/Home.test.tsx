@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import type { CharactersResponse } from '../../api/characters.interfaces';
-import { mockRouterPush } from '../../setupTests';
+import { mockRedirect } from '../../setupTests';
 import { renderWithProviders } from '../../test-utils/renderWithProviders';
 import { Home } from '.';
 
@@ -15,7 +15,7 @@ const emptyInitialData: CharactersResponse = {
 describe('Home component', () => {
   beforeEach(() => {
     localStorage.clear();
-    mockRouterPush.mockClear();
+    mockRedirect.mockClear();
   });
 
   it('renders characters provided by the server', () => {
@@ -49,7 +49,7 @@ describe('Home component', () => {
     expect(screen.getByRole('textbox')).toHaveValue('rick');
   });
 
-  it('stores a trimmed search term and navigates with URL parameters', async () => {
+  it('stores a trimmed search term and submits the server action', async () => {
     const user = userEvent.setup();
 
     renderWithProviders(
@@ -61,6 +61,12 @@ describe('Home component', () => {
     await user.click(screen.getByRole('button', { name: /search/i }));
 
     expect(localStorage.getItem('input')).toBe('rick');
-    expect(mockRouterPush).toHaveBeenCalledWith('/?page=1&search=rick');
+    expect(mockRedirect).toHaveBeenCalledWith({
+      href: {
+        pathname: '/',
+        query: { page: '1', search: 'rick' },
+      },
+      locale: 'en',
+    });
   });
 });

@@ -1,9 +1,10 @@
 'use client';
 
-import { useRouter } from '../../i18n/navigation';
+import { useLocale } from 'next-intl';
+
+import { searchCharacters } from '../../app/[locale]/actions';
 import { Search } from '../../components/Search';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import { createPageUrl } from './createPageUrl';
 
 type SearchControlsProps = {
   searchTerm: string;
@@ -11,23 +12,23 @@ type SearchControlsProps = {
 
 export function SearchControls({ searchTerm }: SearchControlsProps) {
   const [search, setSearch] = useLocalStorage('input', searchTerm);
-  const router = useRouter();
+  const locale = useLocale();
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
-  const handleSearchClick = () => {
-    const trimmed = search.trim();
-    setSearch(trimmed);
-    router.push(createPageUrl(1, trimmed));
+  const handleSubmit = () => {
+    setSearch(search.trim());
   };
 
   return (
     <Search
       value={search}
       onChange={handleSearch}
-      onSearch={handleSearchClick}
+      onSubmit={handleSubmit}
+      action={searchCharacters}
+      locale={locale}
     />
   );
 }
